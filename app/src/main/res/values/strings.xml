@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CarMaintain</string>
+    <string name="title_activity_car_select">CarSelect</string>
+    <string name="action_settings">Settings</string>
+</resources>
