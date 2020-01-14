@@ -4,14 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.exanmple.db.BaoJun560;
+import com.exanmple.db.MyDBConfig;
+import com.exanmple.db.MyDBMaster;
+
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
     private Button carSelectButton,itemSetButton,lastSetButton,myBotton;
-    private MySQLiteUse mySQLiteUse;
+    public static MyDBMaster myDBMaster;
     private Context mContext;
 
     @Override
@@ -25,9 +32,13 @@ public class MainActivity extends AppCompatActivity {
         myBotton = (Button) findViewById(R.id.button_my);
 
         mContext = MainActivity.this;
-        mySQLiteUse = new MySQLiteUse(mContext, "car.db", null, 1);
 
-        MySQLiteUse.mySQLUse.initMySQlite();
+        //启动数据库
+        myDBMaster = new MyDBMaster(getApplicationContext());
+        myDBMaster.openDataBase();
+
+        if(myDBMaster.dbIsCreate == true)
+            new BaoJun560(MainActivity.myDBMaster);
 
         carSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override

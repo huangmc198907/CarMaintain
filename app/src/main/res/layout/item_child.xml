@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    tools:context="com.exanmple.carmaintain.MainActivity">
+
+    <ImageView
+        android:id="@+id/child_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true" />
+    <TextView
+        android:id="@+id/child_name"
+        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/child_img"
+        android:layout_marginLeft="15dp"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:text="吉泽明步"/>
+    <TextView
+        android:id="@+id/child_model"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:textSize="13sp"
+
+        android:text="4G"/>
+</RelativeLayout>

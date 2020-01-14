@@ -24,7 +24,7 @@
             android:id="@+id/car_text"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
-            android:text="未选择车辆型号"
+            android:text="未选设置车辆信息"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textSize="20dp"/>

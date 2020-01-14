@@ -21,23 +21,13 @@
         android:background="#ff0000"
         android:textAlignment="center" />
 
-    <TextView
-        android:id="@+id/car_text"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:text="未选择车辆型号"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textSize="20dp"
-        android:layout_below="@+id/textView"/>
-
     <Button
         android:id="@+id/button_car_select"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="选择车型"
         android:textSize="20dp"
-        android:layout_below="@+id/car_text"/>
+        android:layout_below="@+id/textView"/>
 
     <Button
         android:id="@+id/button_item_set"

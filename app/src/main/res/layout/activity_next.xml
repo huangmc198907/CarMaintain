@@ -20,6 +20,20 @@
             android:background="#ff0000"
             android:textAlignment="center"/>
 
+        <EditText
+            android:id="@+id/car_mileage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入公里数:5000"
+            android:textSize="20dp"/>
+
+        <EditText
+            android:id="@+id/maintain_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入时间:2020/01/13"
+            android:textSize="20dp"/>
+
         <Button
             android:id="@+id/button4"
             android:layout_width="fill_parent"
