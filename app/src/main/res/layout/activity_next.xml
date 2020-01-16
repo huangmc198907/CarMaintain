@@ -21,32 +21,23 @@
             android:textAlignment="center"/>
 
         <EditText
-            android:id="@+id/car_mileage"
+            android:id="@+id/next_maintain_mileage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="输入公里数:5000"
             android:textSize="20dp"/>
 
         <EditText
-            android:id="@+id/maintain_time"
+            android:id="@+id/next_maintain_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="输入时间:2020/01/13"
             android:textSize="20dp"/>
 
-        <Button
-            android:id="@+id/button4"
+        <ExpandableListView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="完成本次保养"
-            android:textSize="20dp"/>
-
-        <ListView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/item_list">
-
-        </ListView>
+            android:id="@+id/next_item_list"/>
 
     </LinearLayout>
 

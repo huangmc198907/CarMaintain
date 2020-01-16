@@ -13,14 +13,23 @@
         android:gravity="center_vertical"
         android:layout_marginLeft="40dp"
         android:textSize="20sp"
-        android:text="我的好友"/>
+        android:text=""/>
     <TextView
         android:id="@+id/group_number"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:layout_toLeftOf="@+id/add_text"
+        android:text="20"
+        android:paddingRight="10dp"/>
+
+    <TextView
+        android:id="@+id/add_text"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="center"
         android:textSize="15sp"
         android:layout_alignParentRight="true"
-        android:text="20"/>
+        android:text="长按\n添加"/>
 </RelativeLayout>

@@ -21,10 +21,10 @@
             android:textAlignment="center"/>
 
         <TextView
-            android:id="@+id/car_text"
+            android:id="@+id/item_set_text"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
-            android:text="未设置车辆信息"
+            android:text=""
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:textSize="20dp"/>
@@ -32,7 +32,7 @@
         <ExpandableListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/maintain_list"/>
+            android:id="@+id/item_set_maintain_list"/>
 
     </LinearLayout>
 

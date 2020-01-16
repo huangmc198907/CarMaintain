@@ -21,7 +21,7 @@
             android:textAlignment="center"/>
 
         <TextView
-            android:id="@+id/car_text"
+            android:id="@+id/my_text"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:text="未选设置车辆信息"

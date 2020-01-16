@@ -10,7 +10,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginLeft="10dp"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:src="@drawable/baojun"/>
     <TextView
         android:id="@+id/child_name"
         android:layout_height="40dp"
@@ -19,7 +20,7 @@
         android:layout_marginLeft="15dp"
         android:textSize="16sp"
         android:gravity="center_vertical"
-        android:text="吉泽明步"/>
+        android:text=""/>
     <TextView
         android:id="@+id/child_model"
         android:layout_width="wrap_content"
@@ -29,5 +30,5 @@
         android:layout_marginRight="5dp"
         android:textSize="13sp"
 
-        android:text="4G"/>
+        android:text="点击修改"/>
 </RelativeLayout>
