@@ -43,10 +43,10 @@
             android:hint="输入时间:2020/01/13"
             android:textSize="20dp"/>
 
-        <ExpandableListView
+        <ListView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/last_set_car_list"/>
+            android:id="@+id/set_car_select_list"/>
 
     </LinearLayout>
 

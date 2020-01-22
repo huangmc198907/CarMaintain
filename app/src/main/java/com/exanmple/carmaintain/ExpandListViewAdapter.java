@@ -12,6 +12,8 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
     private List<String> groupList;//外层的数据源
     private List<List<String>> childList;//里层的数据源
     private Context context;
+    private float groupTextSize = 0;
+    private float childTextSize = 0;
 
     public ExpandListViewAdapter(Context context, List<String> groupList,List<List<String>> childList ){
         this.context = context;
@@ -22,6 +24,16 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public int getGroupCount() {
         return groupList.size();
+    }
+
+    public void setTextSize(float groupTSize, float childTSize){
+        this.groupTextSize = groupTSize;
+        this.childTextSize = childTSize;
+    }
+
+    public void setTextSize(float groupTSize, float childTSize, float childChildTextSize){
+        this.groupTextSize = groupTSize;
+        this.childTextSize = childTSize;
     }
 
     /**
@@ -66,8 +78,14 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         TextView textView = (TextView) convertView.findViewById(R.id.group_textview);
         //子元素的个数
         TextView number = (TextView) convertView.findViewById(R.id.group_number);
+        TextView addText = (TextView) convertView.findViewById(R.id.add_text);
         number.setText(childList.get(groupPosition).size()+"个");
         textView.setText(groupList.get(groupPosition));
+        if(groupTextSize > 0) {
+            textView.setTextSize(groupTextSize);
+            number.setTextSize(groupTextSize * 2 / 3);
+            addText.setTextSize(groupTextSize * 2 / 3);
+        }
         return convertView;
     }
 
@@ -75,8 +93,13 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
         view = View.inflate(context, R.layout.item_child, null);
         TextView textView = (TextView) view.findViewById(R.id.child_name);
+        TextView modelView = (TextView) view.findViewById(R.id.child_model);
         //外层的分组名字
         textView.setText(childList.get(groupPosition).get(childPosition));
+        if(childTextSize > 0) {
+            textView.setTextSize(childTextSize);
+            modelView.setTextSize(childTextSize * 2 / 3);
+        }
         return view;
     }
 

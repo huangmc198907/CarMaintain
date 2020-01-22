@@ -47,6 +47,8 @@ public class FruitAdapter extends ArrayAdapter<Fruit> {
         // 获取控件实例，并调用set...方法使其显示出来
         viewHolder.fruitImage.setImageResource(fruit.getImageId());
         viewHolder.fruitName.setText(fruit.getName());
+        if(fruit.getTextSize() > 0)
+            viewHolder.fruitName.setTextSize(fruit.getTextSize());
         return view;
     }
 

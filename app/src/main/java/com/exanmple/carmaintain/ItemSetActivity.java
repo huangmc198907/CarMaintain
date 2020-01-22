@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -27,12 +28,16 @@ public class ItemSetActivity extends AppCompatActivity {
     private ExpandListViewAdapter myAdapter;
     private List<String> groupList = new ArrayList<>();
     private List<List<String>> childList = new ArrayList<>();
+    private int width1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_set);
-
+        WindowManager wm1 = this.getWindowManager();
+        width1 = wm1.getDefaultDisplay().getWidth();
+        TextView textView = findViewById(R.id.item_set_text);
+        textView.setTextSize(width1/MainActivity.TEXT_BIG_SIZE);
         initView();
     }
 
@@ -69,6 +74,7 @@ public class ItemSetActivity extends AppCompatActivity {
         }
 
         myAdapter = new ExpandListViewAdapter(this,groupList,childList);
+        myAdapter.setTextSize(width1/MainActivity.TEXT_BIG_SIZE, width1/MainActivity.TEXT_MIDDLE_SIZE);
         expandableListView.setAdapter(myAdapter);
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
