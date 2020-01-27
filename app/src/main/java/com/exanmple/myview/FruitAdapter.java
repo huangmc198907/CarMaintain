@@ -1,4 +1,4 @@
-package com.exanmple.carmaintain;
+package com.exanmple.myview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.exanmple.carmaintain.R;
+import com.exanmple.myview.Fruit;
 
 import java.util.List;
 

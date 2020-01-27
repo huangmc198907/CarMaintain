@@ -4,11 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +14,8 @@ import android.widget.TextView;
 import com.exanmple.db.CarMaintainBean;
 import com.exanmple.db.CarMaintainItemBean;
 import com.exanmple.db.MyCarMaintainRecordBean;
+import com.exanmple.myview.Fruit;
+import com.exanmple.myview.FruitAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,19 +26,29 @@ public class LastSetActivity extends AppCompatActivity {
     // fruitList用于存储数据
     private List<Fruit> fruitList=new ArrayList<>();
     private FruitAdapter adapter;
-    private int width1;
 
     private String buildRecordString(String car_name, String license_plate){
         return "汽车型号："+car_name+"  设置车牌号："+license_plate;
     }
 
-    private boolean isMileageError(String car_name, String mileage){
+    private boolean isMileageError(String car_name, String mileage, String license_plate){
+        List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != maintainList){
+            for(int i=0; i < maintainList.size(); i++){
+                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)maintainList.get(i);
+                if(car_name.equals(myCarMaintainRecordBean.name) &&
+                        license_plate.equals(myCarMaintainRecordBean.license_plate) &&
+                        mileage.equals(""+myCarMaintainRecordBean.item_mileage)){
+                    return true;
+                }
+            }
+        }
         List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-        if(null != carList){
-            for(int i=0; i < carList.size(); i++){
-                CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(i);
-                if(car_name.equals(carMaintainBean.name)){
-                    if(carMaintainBean.maintain_mileage_cycle <= Integer.parseInt(mileage))
+        if(null != carList) {
+            for (int i = 0; i < carList.size(); i++) {
+                CarMaintainBean carMaintainBean = (CarMaintainBean) carList.get(i);
+                if (car_name.equals(carMaintainBean.name)) {
+                    if (carMaintainBean.maintain_mileage_cycle <= Integer.parseInt(mileage))
                         return false;
                 }
             }
@@ -61,14 +71,12 @@ public class LastSetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_last_set);
         TextView textView = findViewById(R.id.last_set_text);
 
-        WindowManager wm1 = this.getWindowManager();
-        width1 = wm1.getDefaultDisplay().getWidth();
-
-        textView.setTextSize(width1 / MainActivity.TEXT_BIG_SIZE);
+        float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
+        textView.setTextSize(text_size);
 
         List recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
         if (null != recordList && recordList.size() > 0) {
-            textView.setText("已设置车型");
+            textView.setText("已设置车辆信息");
         }
 
         // 先拿到数据并放在适配器上
@@ -106,13 +114,13 @@ public class LastSetActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    if(true == isMileageError(car_name, mileageString)) {
+                    if(true == isMileageError(car_name, mileageString, license_plate)) {
                         List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
                         if(null != carList){
                             for(int i = 0; i < carList.size(); i++) {
                                 CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(i);
                                 if(car_name.equals(carMaintainBean.name))
-                                    textView.setText("输入公里数小于汽车保养公里数（汽车保养公里数：" +carMaintainBean.maintain_mileage_cycle+ "）");
+                                    textView.setText("输入公里数已设置或者小于汽车保养公里数（汽车保养公里数：" +carMaintainBean.maintain_mileage_cycle+ "）");
                             }
                         }else {
                             textView.setText("输入公里数错误");
@@ -176,10 +184,10 @@ public class LastSetActivity extends AppCompatActivity {
                 int item_number = car_mileage / item_mileage;
                 int car_number = car_mileage / maintain_mileage;
                 car_mileage = maintain_mileage * car_number;
-                Log.d("TEST DEBUG", "保养项目:" + carMaintainItemBean.item_name + " 公里数:" + item_mileage + " 时间：" + carMaintainItemBean.item_time_cycle);
-                Log.d("TEST DEBUG", "setLastRecordDialog: item_number:" + item_number + " flaut:" + car_mileage / item_mileage);
-                Log.d("TEST DEBUG", "车型保养公里数:" + maintain_mileage + " 时间:" + maintain_time);
-                Log.d("TEST DEBUG", "setLastRecordDialog: car_number:" + car_number + " flaut:" + car_mileage / maintain_mileage);
+                //Log.d("TEST DEBUG", "保养项目:" + carMaintainItemBean.item_name + " 公里数:" + item_mileage + " 时间：" + carMaintainItemBean.item_time_cycle);
+                //Log.d("TEST DEBUG", "setLastRecordDialog: item_number:" + item_number + " flaut:" + car_mileage / item_mileage);
+                //Log.d("TEST DEBUG", "车型保养公里数:" + maintain_mileage + " 时间:" + maintain_time);
+                //Log.d("TEST DEBUG", "setLastRecordDialog: car_number:" + car_number + " flaut:" + car_mileage / maintain_mileage);
                 if (item_number > 0 && car_number > 0 &&
                         (car_mileage >= (item_mileage * item_number)) &&
                         (car_mileage < (item_mileage * item_number + maintain_mileage)) ){
@@ -227,6 +235,7 @@ public class LastSetActivity extends AppCompatActivity {
                         myCarMaintainRecordBean.item_name = items[i];
                         myCarMaintainRecordBean.item_mileage = Integer.parseInt(mileage);
                         myCarMaintainRecordBean.item_time = time;
+                        Log.d("TEST_DEBUG", "["+mileage+"]添加保养项目: "+items[i]+"("+car_name+" "+license_plate+")");
                         MainActivity.myDBMaster.myCarMaintainRecordDB.insertData(myCarMaintainRecordBean);
                     }
                 }
@@ -252,7 +261,8 @@ public class LastSetActivity extends AppCompatActivity {
                 if(addFlag == true){
                     String recordStrings = buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate);
                     Fruit a = new Fruit(recordStrings,R.drawable.baojun);
-                    a.setTextSize(width1/MainActivity.TEXT_BIG_SIZE);
+                    float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
+                    a.setTextSize(text_size);
                     recordString.add(recordStrings);
                     fruitList.add(a);
                 }

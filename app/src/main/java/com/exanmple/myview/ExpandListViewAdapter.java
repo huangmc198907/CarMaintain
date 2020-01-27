@@ -1,4 +1,4 @@
-package com.exanmple.carmaintain;
+package com.exanmple.myview;
 
 import android.content.Context;
 import android.view.View;
@@ -6,14 +6,16 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.exanmple.carmaintain.R;
+
 import java.util.List;
 
 public class ExpandListViewAdapter extends BaseExpandableListAdapter {
     private List<String> groupList;//外层的数据源
     private List<List<String>> childList;//里层的数据源
     private Context context;
-    private float groupTextSize = 0;
-    private float childTextSize = 0;
+    private float groupTextSize = 20;
+    private float childTextSize = 20;
 
     public ExpandListViewAdapter(Context context, List<String> groupList,List<List<String>> childList ){
         this.context = context;
@@ -31,9 +33,8 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         this.childTextSize = childTSize;
     }
 
-    public void setTextSize(float groupTSize, float childTSize, float childChildTextSize){
-        this.groupTextSize = groupTSize;
-        this.childTextSize = childTSize;
+    public float getTextSize(){
+        return this.groupTextSize;
     }
 
     /**

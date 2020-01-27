@@ -5,41 +5,39 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import com.exanmple.db.BaoJun560;
-import com.exanmple.db.MyDBConfig;
 import com.exanmple.db.MyDBMaster;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private Button carSelectButton,itemSetButton,lastSetButton,myBotton;
     public static MyDBMaster myDBMaster;
     private Context mContext;
-    public final static float TEXT_BIG_SIZE = 30;
-    public final static float TEXT_MIDDLE_SIZE = 40;
-    public final static float TEXT_LITTLE_SIZE = 50;
+    public final static float TEXT_BIG_SIZE = 25;
+    public final static float TEXT_MIDDLE_SIZE = 30;
+    public final static float TEXT_LITTLE_SIZE = 35;
+
+    final public static float getTextSize(Context context, int width){
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (width / TEXT_BIG_SIZE / scale + 0.5f);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        WindowManager wm1 = this.getWindowManager();
-        int width1 = wm1.getDefaultDisplay().getWidth();
 
         carSelectButton = (Button) findViewById(R.id.button_car_select);
         itemSetButton = (Button) findViewById(R.id.button_item_set);
         lastSetButton = (Button) findViewById(R.id.button_last_set);
         myBotton = (Button) findViewById(R.id.button_my);
-        carSelectButton.setTextSize(width1 / TEXT_BIG_SIZE);
-        itemSetButton.setTextSize(width1 / TEXT_BIG_SIZE);
-        lastSetButton.setTextSize(width1 / TEXT_BIG_SIZE);
-        myBotton.setTextSize(width1 / TEXT_BIG_SIZE);
+        float text_size = getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
+        carSelectButton.setTextSize(text_size);
+        itemSetButton.setTextSize(text_size);
+        lastSetButton.setTextSize(text_size);
+        myBotton.setTextSize(text_size);
 
         mContext = MainActivity.this;
 

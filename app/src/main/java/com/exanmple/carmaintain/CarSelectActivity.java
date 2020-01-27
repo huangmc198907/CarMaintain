@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +19,8 @@ import android.widget.TextView;
 import com.exanmple.db.CarMaintainBean;
 import com.exanmple.db.CarMaintainItemBean;
 import com.exanmple.db.MyCarMaintainRecordBean;
+import com.exanmple.myview.Fruit;
+import com.exanmple.myview.FruitAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,20 +31,17 @@ public class CarSelectActivity extends AppCompatActivity {
     private String car_name = null;
     private static boolean longClickFlag = false;
     private FruitAdapter adapter;
-    private int width1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_select);
 
-        WindowManager wm1 = this.getWindowManager();
-        width1 = wm1.getDefaultDisplay().getWidth();
-
         Button addButton = (Button)findViewById(R.id.add_car);
         TextView textView = (TextView)findViewById(R.id.car_select_text);
-        addButton.setTextSize(width1/MainActivity.TEXT_BIG_SIZE);
-        textView.setTextSize(width1/MainActivity.TEXT_BIG_SIZE);
+        float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
+        addButton.setTextSize(text_size);
+        textView.setTextSize(text_size);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -293,7 +291,8 @@ public class CarSelectActivity extends AppCompatActivity {
             for(int i=0; i < carlist.size(); i++){
                 CarMaintainBean carMaintainBean = (CarMaintainBean) carlist.get(i);
                 Fruit a = new Fruit("" + carMaintainBean.name, R.drawable.baojun);
-                a.setTextSize(width1/MainActivity.TEXT_BIG_SIZE);
+                float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
+                a.setTextSize(text_size);
                 car_name = carMaintainBean.name;
                 fruitList.add(a);
             }
@@ -347,13 +346,13 @@ public class CarSelectActivity extends AppCompatActivity {
             MyCarMaintainRecordBean myCarMaintainRecordBean = new MyCarMaintainRecordBean();
             myCarMaintainRecordBean.name = car_name;
             myCarMaintainRecordBean.license_plate = license_plate;
-            myCarMaintainRecordBean.item_mileage = 5000;
+            myCarMaintainRecordBean.item_mileage = 0;
             myCarMaintainRecordBean.item_time = "";
 
             TextView textView = findViewById(R.id.car_select_text);
             textView.setText("设置车型成功："+car_name+"\n车牌号："+license_plate);
             textView.setTextColor(Color.rgb(0, 0, 255));
-
+            Log.d("TEST_DEBUG", "\\\\\\\\"+carlist.size());
             for(int i=0; i < carlist.size(); i++){
                 CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean) carlist.get(i);
                 myCarMaintainRecordBean.item_name = carMaintainItemBean.item_name;

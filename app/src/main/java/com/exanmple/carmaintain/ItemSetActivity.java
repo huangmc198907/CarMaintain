@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -18,7 +17,7 @@ import android.widget.TextView;
 
 import com.exanmple.db.CarMaintainBean;
 import com.exanmple.db.CarMaintainItemBean;
-import com.exanmple.db.MyCarMaintainRecordBean;
+import com.exanmple.myview.ExpandListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +27,14 @@ public class ItemSetActivity extends AppCompatActivity {
     private ExpandListViewAdapter myAdapter;
     private List<String> groupList = new ArrayList<>();
     private List<List<String>> childList = new ArrayList<>();
-    private int width1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_set);
-        WindowManager wm1 = this.getWindowManager();
-        width1 = wm1.getDefaultDisplay().getWidth();
         TextView textView = findViewById(R.id.item_set_text);
-        textView.setTextSize(width1/MainActivity.TEXT_BIG_SIZE);
+        float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
+        textView.setTextSize(text_size);
         initView();
     }
 
@@ -54,7 +51,7 @@ public class ItemSetActivity extends AppCompatActivity {
         List itemlist = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
 
         if (null != carlist && null != itemlist) {
-            textView.setText("以设置车辆信息");
+            textView.setText("已设置车辆信息");
             for(int i=0; i < carlist.size(); i++) {
                 CarMaintainBean carMaintainBean = (CarMaintainBean) carlist.get(i);
                 Log.d("TEST_DEBUG","车辆:"+carMaintainBean.name);
@@ -74,7 +71,8 @@ public class ItemSetActivity extends AppCompatActivity {
         }
 
         myAdapter = new ExpandListViewAdapter(this,groupList,childList);
-        myAdapter.setTextSize(width1/MainActivity.TEXT_BIG_SIZE, width1/MainActivity.TEXT_MIDDLE_SIZE);
+        float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
+        myAdapter.setTextSize(text_size, text_size * 2 / 3);
         expandableListView.setAdapter(myAdapter);
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {

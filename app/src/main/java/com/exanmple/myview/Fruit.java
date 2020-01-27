@@ -1,9 +1,9 @@
-package com.exanmple.carmaintain;
+package com.exanmple.myview;
 
 public class Fruit {
     private String name;
     private int imageId;
-    private float textSize = 0;
+    private float textSize = 20;
 
     public Fruit(String name,int imageId){
         this.name=name;

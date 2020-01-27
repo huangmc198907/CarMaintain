@@ -1,7 +1,16 @@
 package com.exanmple.db;
 
+import com.exanmple.carmaintain.MainActivity;
+
+import java.util.List;
+
 public class BaoJun560 {
     public BaoJun560(MyDBMaster myDBMaster) {
+        List list = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if(list != null){
+            if(list.size() != 0)
+                return;
+        }
         CarMaintainBean baoJun560Car = new CarMaintainBean();
         baoJun560Car.name = "宝骏560 1.8L 手动挡";
         baoJun560Car.maintain_mileage_cycle = 5000;

@@ -20,10 +20,12 @@
             android:background="#ff0000"
             android:textAlignment="center"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
+        <ExpandableListView
+            android:id="@+id/maintain_record_expandable_listView"
             android:layout_height="match_parent"
-            android:id="@+id/maintain_record_list"/>
+            android:layout_width="match_parent"
+            android:text="Hello World!">
+        </ExpandableListView>
 
     </LinearLayout>
 
