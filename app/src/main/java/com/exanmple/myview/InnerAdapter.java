@@ -76,8 +76,8 @@ public class InnerAdapter extends BaseExpandableListAdapter {
         textView.setText(secondListView.get(i).getName());
         float text_size = MainActivity.getTextSize(activity, activity.getWindowManager().getDefaultDisplay().getWidth());
         textView.setTextSize(text_size);
-        number.setTextSize(text_size * 2 / 3);
-        modeText.setTextSize(text_size * 2 / 3);
+        number.setTextSize(text_size * 4 / 5);
+        modeText.setTextSize(text_size * 4 / 5);
         return view;
 
         /*
@@ -111,7 +111,7 @@ public class InnerAdapter extends BaseExpandableListAdapter {
         textView.setText(secondListView.get(i).getSecondList().get(i1).getName());
         float text_size = MainActivity.getTextSize(activity, activity.getWindowManager().getDefaultDisplay().getWidth());
         textView.setTextSize(text_size);
-        modeText.setTextSize(text_size * 2 / 3);
+        modeText.setTextSize(text_size * 4 / 5);
         return view;
 
         /*

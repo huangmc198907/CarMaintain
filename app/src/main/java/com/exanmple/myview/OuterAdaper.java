@@ -29,15 +29,13 @@ public class OuterAdaper extends BaseExpandableListAdapter {
         OuterAdaper.itemLongClickListener = itemLongClickListener;
     }
 
-    public void setChildClickListener(ExpandableListView.OnChildClickListener childClickListener) {
-        OuterAdaper.childClickListener = childClickListener;
-    }
-
     //构造方法
     public OuterAdaper(List<ThreeExpandListView> firstList, Activity activity) {
         if (firstList != null) {
             this.firstList = firstList;
-        } else firstList = new ArrayList<>();
+        } else {
+            this.firstList = new ArrayList<>();
+        }
         this.activity = activity;
     }
 
@@ -94,8 +92,8 @@ public class OuterAdaper extends BaseExpandableListAdapter {
         textView.setText(firstList.get(groupPosition).getName());
         float text_size = MainActivity.getTextSize(activity, activity.getWindowManager().getDefaultDisplay().getWidth());
         textView.setTextSize(text_size);
-        number.setTextSize(text_size * 2 / 3);
-        addText.setTextSize(text_size * 2 / 3);
+        number.setTextSize(text_size * 4 / 5);
+        addText.setTextSize(text_size * 4 / 5);
         return convertView;
         /*
         TextView textView = new TextView(activity);

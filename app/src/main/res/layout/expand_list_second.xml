@@ -42,5 +42,5 @@
         android:layout_marginRight="5dp"
         android:textSize="13sp"
 
-        android:text="长按\n添加"/>
+        android:text="长按\n修改"/>
 </RelativeLayout>

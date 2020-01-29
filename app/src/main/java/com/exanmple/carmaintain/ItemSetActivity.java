@@ -72,7 +72,7 @@ public class ItemSetActivity extends AppCompatActivity {
 
         myAdapter = new ExpandListViewAdapter(this,groupList,childList);
         float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
-        myAdapter.setTextSize(text_size, text_size * 2 / 3);
+        myAdapter.setTextSize(text_size, text_size * 4 / 5);
         expandableListView.setAdapter(myAdapter);
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {

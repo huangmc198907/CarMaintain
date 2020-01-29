@@ -15,9 +15,9 @@ public class MainActivity extends AppCompatActivity {
     private Button carSelectButton,itemSetButton,lastSetButton,myBotton;
     public static MyDBMaster myDBMaster;
     private Context mContext;
-    public final static float TEXT_BIG_SIZE = 25;
-    public final static float TEXT_MIDDLE_SIZE = 30;
-    public final static float TEXT_LITTLE_SIZE = 35;
+    public final static float TEXT_BIG_SIZE = 22;
+    public final static float TEXT_MIDDLE_SIZE = 25;
+    public final static float TEXT_LITTLE_SIZE = 27;
 
     final public static float getTextSize(Context context, int width){
         final float scale = context.getResources().getDisplayMetrics().density;

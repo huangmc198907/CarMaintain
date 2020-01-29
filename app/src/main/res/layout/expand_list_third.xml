@@ -23,5 +23,5 @@
         android:layout_marginRight="5dp"
         android:textSize="11sp"
 
-        android:text="长按\n删除"/>
+        android:text="长按删除"/>
 </RelativeLayout>
