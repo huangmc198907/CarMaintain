@@ -18,7 +18,7 @@ public class MyCarMaintainRecordDB {
     public static String KEY_LICENSE_PLATE = "license_plate";
     public static String KEY_ITEM_NAME = "item_name";
     public static String KEY_ITEM_MILEAGE = "item_mileage";
-    public static String KEY_ITEM_TIME = "item_time";
+    public static String KEY_ITEM_DATE = "item_date";
 
     private SQLiteDatabase mDatabase;
     /** 上下文 */
@@ -45,7 +45,7 @@ public class MyCarMaintainRecordDB {
         values.put(KEY_LICENSE_PLATE, myCarMaintainRecordBean.license_plate);
         values.put(KEY_ITEM_NAME, myCarMaintainRecordBean.item_name);
         values.put(KEY_ITEM_MILEAGE, myCarMaintainRecordBean.item_mileage);
-        values.put(KEY_ITEM_TIME, myCarMaintainRecordBean.item_time);
+        values.put(KEY_ITEM_DATE, myCarMaintainRecordBean.item_date);
         return mDatabase.insert(TABLE_NAME, null, values);
     }
 
@@ -78,7 +78,7 @@ public class MyCarMaintainRecordDB {
         values.put(KEY_LICENSE_PLATE, myCarMaintainRecordBean.license_plate);
         values.put(KEY_ITEM_NAME, myCarMaintainRecordBean.item_name);
         values.put(KEY_ITEM_MILEAGE, myCarMaintainRecordBean.item_mileage);
-        values.put(KEY_ITEM_TIME, myCarMaintainRecordBean.item_time);
+        values.put(KEY_ITEM_DATE, myCarMaintainRecordBean.item_date);
         return mDatabase.update(TABLE_NAME, values, KEY_ID + "=" + id, null);
     }
 
@@ -97,7 +97,7 @@ public class MyCarMaintainRecordDB {
                         KEY_LICENSE_PLATE,
                         KEY_ITEM_NAME,
                         KEY_ITEM_MILEAGE,
-                        KEY_ITEM_TIME },
+                        KEY_ITEM_DATE },
                 KEY_ID + "=" + id , null, null, null, null);
         return convertUtil(results);
     }
@@ -116,7 +116,7 @@ public class MyCarMaintainRecordDB {
                         KEY_LICENSE_PLATE,
                         KEY_ITEM_NAME,
                         KEY_ITEM_MILEAGE,
-                        KEY_ITEM_TIME },
+                        KEY_ITEM_DATE },
                 null, null, null, null, null);
         return convertUtil(results);
     }
@@ -139,7 +139,7 @@ public class MyCarMaintainRecordDB {
             myCarMaintainRecordBean.license_plate = cursor.getString(cursor.getColumnIndex(KEY_LICENSE_PLATE));
             myCarMaintainRecordBean.item_name = cursor.getString(cursor.getColumnIndex(KEY_ITEM_NAME));
             myCarMaintainRecordBean.item_mileage = cursor.getInt(cursor.getColumnIndex(KEY_ITEM_MILEAGE));
-            myCarMaintainRecordBean.item_time = cursor.getString(cursor.getColumnIndex(KEY_ITEM_TIME));
+            myCarMaintainRecordBean.item_date = cursor.getString(cursor.getColumnIndex(KEY_ITEM_DATE));
             mList.add(myCarMaintainRecordBean);
             cursor.moveToNext();
         }

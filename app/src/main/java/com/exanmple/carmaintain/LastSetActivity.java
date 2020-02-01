@@ -234,7 +234,7 @@ public class LastSetActivity extends AppCompatActivity {
                         myCarMaintainRecordBean.license_plate = license_plate;
                         myCarMaintainRecordBean.item_name = items[i];
                         myCarMaintainRecordBean.item_mileage = Integer.parseInt(mileage);
-                        myCarMaintainRecordBean.item_time = time;
+                        myCarMaintainRecordBean.item_date = time;
                         Log.d("TEST_DEBUG", "["+mileage+"]添加保养项目: "+items[i]+"("+car_name+" "+license_plate+")");
                         MainActivity.myDBMaster.myCarMaintainRecordDB.insertData(myCarMaintainRecordBean);
                     }

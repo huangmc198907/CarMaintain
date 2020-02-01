@@ -16,6 +16,8 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
     private Context context;
     private float groupTextSize = 20;
     private float childTextSize = 20;
+    private String groupRightText = "";
+    private String childRightText = "";
 
     public ExpandListViewAdapter(Context context, List<String> groupList,List<List<String>> childList ){
         this.context = context;
@@ -31,6 +33,14 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
     public void setTextSize(float groupTSize, float childTSize){
         this.groupTextSize = groupTSize;
         this.childTextSize = childTSize;
+    }
+
+    public void setGroupRightText(String text){
+        this.groupRightText = text;
+    }
+
+    public void setChildRightText(String text){
+        this.childRightText = text;
     }
 
     public float getTextSize(){
@@ -82,6 +92,8 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         TextView addText = (TextView) convertView.findViewById(R.id.add_text);
         number.setText(childList.get(groupPosition).size()+"个");
         textView.setText(groupList.get(groupPosition));
+        if(!this.groupRightText.equals(""))
+            addText.setText(this.groupRightText);
         if(groupTextSize > 0) {
             textView.setTextSize(groupTextSize);
             number.setTextSize(groupTextSize * 2 / 3);
@@ -97,6 +109,8 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         TextView modelView = (TextView) view.findViewById(R.id.child_model);
         //外层的分组名字
         textView.setText(childList.get(groupPosition).get(childPosition));
+        if(!this.childRightText.equals(""))
+            modelView.setText(this.childRightText);
         if(childTextSize > 0) {
             textView.setTextSize(childTextSize);
             modelView.setTextSize(childTextSize * 2 / 3);

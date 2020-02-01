@@ -120,7 +120,7 @@ public class CarSelectActivity extends AppCompatActivity {
                 Fruit fruit=fruitList.get(position);
                 Log.d("TEST_DEBUG","车辆列表中，点击车辆名称="+fruit.getName()+" 列表id="+position);
                 if(longClickFlag != true) {
-                    setCarDialog();
+                    setCarDialog(fruit.getName());
                 }else{
                     longClickFlag = false;
                 }
@@ -299,7 +299,7 @@ public class CarSelectActivity extends AppCompatActivity {
         }
     }
 
-    private void setCarDialog(){
+    private void setCarDialog(final String car_name){
         final EditText inputServer = new EditText(CarSelectActivity.this);
         AlertDialog.Builder builder = new AlertDialog.Builder(CarSelectActivity.this);
         builder.setTitle("输入车牌号").setIcon(R.drawable.baojun).setView(inputServer)
@@ -322,14 +322,14 @@ public class CarSelectActivity extends AppCompatActivity {
                             Log.d("TEST_DEBUG", "已有车型：" + myCarMaintainRecordBean.name+" 车牌号："+myCarMaintainRecordBean.license_plate);
                             if( car_name.equals(myCarMaintainRecordBean.name) && mMeetName.equals(myCarMaintainRecordBean.license_plate) ) {
                                 TextView textView = findViewById(R.id.car_select_text);
-                                textView.setText("以设置该车牌号车型");
+                                textView.setText("已设置该车牌号车型");
                                 textView.setTextColor(Color.rgb(255, 0, 0));
                                 Log.d("TEST_DEBUG", "以设置该车牌号车型");
                                 return;
                             }
                         }
                     }
-                    createCarFirstRecord(mMeetName);
+                    createCarFirstRecord(car_name, mMeetName);
                 }else{
                     TextView textView = findViewById(R.id.car_select_text);
                     textView.setText("未设置车牌");
@@ -340,14 +340,14 @@ public class CarSelectActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void createCarFirstRecord(String license_plate){
+    private void createCarFirstRecord(String car_name, String license_plate){
         List carlist = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
         if (null != carlist) {
             MyCarMaintainRecordBean myCarMaintainRecordBean = new MyCarMaintainRecordBean();
             myCarMaintainRecordBean.name = car_name;
             myCarMaintainRecordBean.license_plate = license_plate;
             myCarMaintainRecordBean.item_mileage = 0;
-            myCarMaintainRecordBean.item_time = "";
+            myCarMaintainRecordBean.item_date = "";
 
             TextView textView = findViewById(R.id.car_select_text);
             textView.setText("设置车型成功："+car_name+"\n车牌号："+license_plate);

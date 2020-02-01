@@ -12,6 +12,8 @@
         android:layout_height="50dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/group_number"
         android:textSize="20sp"
         android:text=""/>
     <TextView

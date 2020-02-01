@@ -73,7 +73,7 @@ public class MyDBMaster {
             MyCarMaintainRecordDB.KEY_LICENSE_PLATE + " text not null , " +
             MyCarMaintainRecordDB.KEY_ITEM_NAME + " text not null , " +
             MyCarMaintainRecordDB.KEY_ITEM_MILEAGE + " integer , " +
-            MyCarMaintainRecordDB.KEY_ITEM_TIME + " text not null );";
+            MyCarMaintainRecordDB.KEY_ITEM_DATE + " text not null );";
 
     /** 删除该数据库下CarMaintain表的语句 */
     private static final String mCarMaintainDelSql = "DROP TABLE IF EXISTS " + CarMaintainDB.TABLE_NAME;
