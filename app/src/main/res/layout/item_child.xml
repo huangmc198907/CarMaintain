@@ -14,10 +14,12 @@
         android:src="@drawable/baojun"/>
     <TextView
         android:id="@+id/child_name"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_toRightOf="@+id/child_img"
         android:layout_marginLeft="15dp"
+        android:layout_toLeftOf="@id/child_model"
+        android:layout_centerVertical="true"
         android:textSize="16sp"
         android:gravity="center_vertical"
         android:text=""/>

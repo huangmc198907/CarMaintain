@@ -65,34 +65,35 @@ public class NextActivity extends AppCompatActivity {
         expandableListView = (ExpandableListView) findViewById(R.id.next_item_list);
         List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
 
+        List <String> carAndLicenseStringList = new ArrayList<>();
         List <String> carStringList = new ArrayList<>();
-        List <String> licenseStringList = new ArrayList<>();
-        List <List <String>> maintainStringList = new ArrayList<>();
-        List <List <String>> timeStringList = new ArrayList<>();
+        List <List <String>> mileageStringList = new ArrayList<>();
+        List <List <String>> dateStringList = new ArrayList<>();
         List <List <List <String>>> itemStringList = new ArrayList<>();
         final List <List <String>> itemStringShowList = new ArrayList<>();
 
         if (null != maintainList) {
             for (int i = 0; i < maintainList.size(); i++) {
                 MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) maintainList.get(i);
+                Log.d("=====++", "initView: "+myCarMaintainRecordBean.name+" "+myCarMaintainRecordBean.license_plate+" "+myCarMaintainRecordBean.item_mileage+" "+myCarMaintainRecordBean.item_name);
                 boolean flag = false;
                 int carId = 0;
-                for (int j = 0; j < carStringList.size(); j++) {
-                    if (carStringList.get(j).equals(myCarMaintainRecordBean.name)) {
+                for (int j = 0; j < carAndLicenseStringList.size(); j++) {
+                    if (carAndLicenseStringList.get(j).equals(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate))) {
                         flag = true;
                         break;
                     }
                     carId++;
                 }
                 if (flag == false) {
+                    carAndLicenseStringList.add(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate));
                     carStringList.add(myCarMaintainRecordBean.name);
-                    licenseStringList.add(myCarMaintainRecordBean.license_plate);
                     List<String> tmp = new ArrayList<>();
                     tmp.add("" + myCarMaintainRecordBean.item_mileage);
-                    maintainStringList.add(tmp);
+                    mileageStringList.add(tmp);
                     List<String> tmp1 = new ArrayList<>();
                     tmp1.add("" + myCarMaintainRecordBean.item_date);
-                    timeStringList.add(tmp1);
+                    dateStringList.add(tmp1);
                     List<String> tmp2 = new ArrayList<>();
                     tmp2.add(myCarMaintainRecordBean.item_name);
                     List<List<String>> tmp3 = new ArrayList<>();
@@ -100,50 +101,50 @@ public class NextActivity extends AppCompatActivity {
                     itemStringList.add(tmp3);
                 }
                 flag = false;
-                for (int j = 0; j < maintainStringList.get(carId).size(); j++) {
-                    if (maintainStringList.get(carId).get(j).equals("" + myCarMaintainRecordBean.item_mileage)) {
+                for (int j = 0; j < mileageStringList.get(carId).size(); j++) {
+                    if (mileageStringList.get(carId).get(j).equals("" + myCarMaintainRecordBean.item_mileage)) {
                         flag = true;
                         itemStringList.get(carId).get(j).add(myCarMaintainRecordBean.item_name);
                         break;
                     }
                 }
                 if (flag == false) {
-                    maintainStringList.get(carId).add("" + myCarMaintainRecordBean.item_mileage);
-                    timeStringList.get(carId).add(""+myCarMaintainRecordBean.item_date);
+                    mileageStringList.get(carId).add("" + myCarMaintainRecordBean.item_mileage);
+                    dateStringList.get(carId).add(""+myCarMaintainRecordBean.item_date);
                     List<String> tmp1 = new ArrayList<>();
                     tmp1.add(myCarMaintainRecordBean.item_name);
                     itemStringList.get(carId).add(tmp1);
                 }
             }
 
-            for(int i=0; i < carStringList.size(); i++){
-                if(carStringList.size() == maintainStringList.size()){
-                    int []maintainInt = new int[maintainStringList.get(i).size()];
-                    for(int j = 0; j < maintainStringList.get(i).size(); j++){
-                        int tmp = Integer.parseInt(maintainStringList.get(i).get(j));
-                        maintainInt[j] = tmp;
+            for(int i=0; i < carAndLicenseStringList.size(); i++){
+                if(carAndLicenseStringList.size() == mileageStringList.size()){
+                    int []mileageInt = new int[mileageStringList.get(i).size()];
+                    for(int j = 0; j < mileageStringList.get(i).size(); j++){
+                        int tmp = Integer.parseInt(mileageStringList.get(i).get(j));
+                        mileageInt[j] = tmp;
                         for (int k = 0; k < j; k++){
-                            if(maintainInt[k] > tmp){
+                            if(mileageInt[k] > tmp){
                                 for(int g = j; g > k; g--){
-                                    maintainInt[g] = maintainInt[g-1];
+                                    mileageInt[g] = mileageInt[g-1];
                                 }
-                                maintainInt[k] = tmp;
+                                mileageInt[k] = tmp;
                                 break;
                             }
                         }
                     }
                     List <List <String>> itemStringTmpList = new ArrayList<>();
-                    for(int j=0; j < maintainInt.length; j++){
-                        for(int k = 0; k < maintainStringList.get(i).size(); k++){
-                            if(maintainStringList.get(i).get(k).equals(""+maintainInt[j])){
+                    for(int j=0; j < mileageInt.length; j++){
+                        for(int k = 0; k < mileageStringList.get(i).size(); k++){
+                            if(mileageStringList.get(i).get(k).equals(""+mileageInt[j])){
                                 itemStringTmpList.add(itemStringList.get(i).get(k));
                             }
                         }
                     }
                     itemStringList.get(i).clear();
-                    maintainStringList.get(i).clear();
-                    for(int j=0; j < maintainInt.length; j++){
-                        maintainStringList.get(i).add(""+maintainInt[j]);
+                    mileageStringList.get(i).clear();
+                    for(int j=0; j < mileageInt.length; j++){
+                        mileageStringList.get(i).add(""+mileageInt[j]);
                         itemStringList.get(i).add(itemStringTmpList.get(j));
                     }
                 }
@@ -152,7 +153,7 @@ public class NextActivity extends AppCompatActivity {
             for(int i=0; i < itemStringList.size(); i++){
                 for(int j=0; j < itemStringList.get(i).size(); j++){
                     for(int k=0; k < itemStringList.get(i).get(j).size(); k++){
-                        Log.d("====", "Car: "+carStringList.get(i)+" "+maintainStringList.get(i).get(j)+" "+itemStringList.get(i).get(j).get(k));
+                        Log.d("====", "Car: "+carAndLicenseStringList.get(i)+" "+mileageStringList.get(i).get(j)+" "+itemStringList.get(i).get(j).get(k));
                     }
                 }
             }
@@ -160,18 +161,18 @@ public class NextActivity extends AppCompatActivity {
             List itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
             List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
             if(null != itemList && null != carList) {
-                for (int i = 0; i < carStringList.size(); i++) {
+                for (int i = 0; i < carAndLicenseStringList.size(); i++) {
                     List <String> itemStringTmp1List = new ArrayList<>();
                     itemStringShowList.add(itemStringTmp1List);
                     int mileage = 0;
                     for(int j=0; j < carList.size(); j++){
-                        CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(i);
+                        CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(j);
                         if(carMaintainBean.name.equals(carStringList.get(i))){
-                            int index = maintainStringList.get(i).size() - 1;
-                            mileage = carMaintainBean.maintain_mileage_cycle+Integer.parseInt(maintainStringList.get(i).get(index));
+                            int index = mileageStringList.get(i).size() - 1;
+                            mileage = carMaintainBean.maintain_mileage_cycle+Integer.parseInt(mileageStringList.get(i).get(index));
                             Log.d("TEST DEBUG", "下次保养公里数="+mileage);
-                            itemStringShowList.get(i).add(buildDateString(""+mileage));
-                            String date = timeStringList.get(i).get(index);
+                            itemStringShowList.get(i).add(buildMileageString(""+mileage));
+                            String date = dateStringList.get(i).get(index);
                             if(!date.equals("")) {
                                 String year = date.substring(0, 4);
                                 String month = date.substring(5, 7);
@@ -196,10 +197,10 @@ public class NextActivity extends AppCompatActivity {
                         CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean)itemList.get(j);
                         if(carMaintainItemBean.name.equals(carStringList.get(i))){
                             boolean flag = false;
-                            for(int k=maintainStringList.get(i).size() - 1; k >= 0 ; k--){
+                            for(int k=mileageStringList.get(i).size() - 1; k >= 0 ; k--){
                                 for(int g=0; g < itemStringList.get(i).get(k).size(); g++){
                                     if(carMaintainItemBean.item_name.equals(itemStringList.get(i).get(k).get(g))){
-                                        if((mileage - Integer.parseInt(maintainStringList.get(i).get(k))) >= carMaintainItemBean.item_mileage_cycle){
+                                        if((mileage - Integer.parseInt(mileageStringList.get(i).get(k))) >= carMaintainItemBean.item_mileage_cycle){
                                             itemStringShowList.get(i).add(buildItemString(carMaintainItemBean.item_name));
                                         }
                                         flag = true;
@@ -215,7 +216,7 @@ public class NextActivity extends AppCompatActivity {
                     for(int j=0; j < itemString.length; j++){
                         itemString[j] = itemStringShowList.get(i).get(j);
                     }
-                    addData(buildRecordString(carStringList.get(i), licenseStringList.get(i)), itemString);
+                    addData(carAndLicenseStringList.get(i), itemString);
                 }
             }
         }

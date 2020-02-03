@@ -5,12 +5,22 @@
     android:layout_height="40dp"
     tools:context="com.exanmple.carmaintain.MainActivity">
 
+    <ImageView
+        android:id="@+id/third_img"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/baojun"/>
+
     <TextView
         android:id="@+id/third_name"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_toRightOf="@+id/child_img"
+        android:layout_toRightOf="@+id/third_img"
+        android:layout_toLeftOf="@+id/third_model"
         android:layout_marginLeft="25dp"
+        android:layout_centerVertical="true"
         android:textSize="12sp"
         android:gravity="center_vertical"
         android:text=""/>

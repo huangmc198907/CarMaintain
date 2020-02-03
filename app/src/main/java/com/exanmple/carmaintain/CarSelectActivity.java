@@ -355,8 +355,10 @@ public class CarSelectActivity extends AppCompatActivity {
             Log.d("TEST_DEBUG", "\\\\\\\\"+carlist.size());
             for(int i=0; i < carlist.size(); i++){
                 CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean) carlist.get(i);
-                myCarMaintainRecordBean.item_name = carMaintainItemBean.item_name;
-                MainActivity.myDBMaster.myCarMaintainRecordDB.insertData(myCarMaintainRecordBean);
+                if(carMaintainItemBean.name.equals(car_name)) {
+                    myCarMaintainRecordBean.item_name = carMaintainItemBean.item_name;
+                    MainActivity.myDBMaster.myCarMaintainRecordDB.insertData(myCarMaintainRecordBean);
+                }
             }
         }
     }

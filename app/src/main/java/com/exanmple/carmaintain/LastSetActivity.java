@@ -43,6 +43,10 @@ public class LastSetActivity extends AppCompatActivity {
                 }
             }
         }
+        if(Integer.parseInt(mileage) > 0) {
+            return false;
+        }
+        /*
         List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
         if(null != carList) {
             for (int i = 0; i < carList.size(); i++) {
@@ -53,6 +57,8 @@ public class LastSetActivity extends AppCompatActivity {
                 }
             }
         }
+
+         */
         return true;
     }
 

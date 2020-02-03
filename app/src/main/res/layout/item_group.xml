@@ -2,18 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#ed88ed"
     tools:context="com.exanmple.carmaintain.MainActivity">
+
+    <ImageView
+        android:id="@+id/group_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/baojun"
+        android:layout_centerVertical="true"
+        />
 
     <TextView
         android:id="@+id/group_textview"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_marginLeft="40dp"
-        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@id/group_image"
         android:layout_toLeftOf="@+id/group_number"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
         android:textSize="20sp"
         android:text=""/>
     <TextView
