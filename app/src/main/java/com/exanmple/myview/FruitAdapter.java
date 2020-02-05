@@ -1,9 +1,18 @@
 package com.exanmple.myview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +20,9 @@ import android.widget.TextView;
 import com.exanmple.carmaintain.R;
 import com.exanmple.myview.Fruit;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class FruitAdapter extends ArrayAdapter<Fruit> {
@@ -48,7 +60,10 @@ public class FruitAdapter extends ArrayAdapter<Fruit> {
         }
 
         // 获取控件实例，并调用set...方法使其显示出来
-        viewHolder.fruitImage.setImageResource(fruit.getImageId());
+        byte[] b = fruit.getImageIcon();
+        Log.d("====", "getView: b.length="+b.length);
+        Bitmap bitmap1 = BitmapFactory.decodeByteArray(b, 0, b.length, null);
+        viewHolder.fruitImage.setImageBitmap(bitmap1);
         viewHolder.fruitName.setText(fruit.getName());
         if(fruit.getTextSize() > 0)
             viewHolder.fruitName.setTextSize(fruit.getTextSize());

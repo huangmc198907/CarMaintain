@@ -1,11 +1,47 @@
 package com.exanmple.db;
 
-import com.exanmple.carmaintain.MainActivity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
+import com.exanmple.carmaintain.MainActivity;
+import com.exanmple.carmaintain.R;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class BaoJun560 {
-    public BaoJun560(MyDBMaster myDBMaster) {
+    final static public Bitmap compressBitmap(Bitmap bitmap){
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 1;
+        options.inJustDecodeBounds = false;
+        int length = os.toByteArray().length;
+        while(length > (5 * 1024)) {
+            bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(os.toByteArray()), null, options);
+            ByteArrayOutputStream osTmp = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, osTmp);
+            length = osTmp.toByteArray().length;
+            if(length > 10 * 1024){
+                options.inSampleSize = options.inSampleSize * 2;
+            }else {
+                options.inSampleSize++;
+            }
+        }
+        return bitmap;
+    }
+
+    public BaoJun560(Context context, MyDBMaster myDBMaster) {
         List list = MainActivity.myDBMaster.carMaintainDB.queryDataList();
         if(list != null){
             if(list.size() != 0)
@@ -15,7 +51,11 @@ public class BaoJun560 {
         baoJun560Car.name = "宝骏560 1.8L 手动挡";
         baoJun560Car.maintain_mileage_cycle = 5000;
         baoJun560Car.maintain_time_cycle = 3;
-        baoJun560Car.icon_path = "baojun.jpg";
+        Drawable drawable = context.getResources().getDrawable(R.drawable.baojun);
+        Bitmap bitmap = compressBitmap(((BitmapDrawable)drawable).getBitmap());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+        baoJun560Car.icon_byte = os.toByteArray();
 
         myDBMaster.carMaintainDB.insertData(baoJun560Car);
 

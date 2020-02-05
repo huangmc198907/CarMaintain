@@ -10,7 +10,7 @@ public class CarMaintainBean {
     /** 汽车保养周期时间 */
     public int maintain_time_cycle;
 
-    public String icon_path;
+    public byte[] icon_byte;
 
     /**
      * 转化成字符串
@@ -22,7 +22,7 @@ public class CarMaintainBean {
         builder.append("汽车名称：").append(name).append("--");
         builder.append("公里数周期：").append(maintain_mileage_cycle).append("--");
         builder.append("时间周期：").append(maintain_time_cycle).append("--");
-        builder.append("图标路径：").append(icon_path).append("]");
+        builder.append("图标：").append(icon_byte).append("]");
         return builder.toString();
     }
 }

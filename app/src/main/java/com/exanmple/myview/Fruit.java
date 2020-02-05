@@ -2,20 +2,20 @@ package com.exanmple.myview;
 
 public class Fruit {
     private String name;
-    private int imageId;
+    private byte[] imageIcon;
     private float textSize = 20;
 
-    public Fruit(String name,int imageId){
+    public Fruit(String name,byte[] iconByte){
         this.name=name;
-        this.imageId=imageId;
+        this.imageIcon=iconByte;
     }
 
     public String getName(){
         return name;
     }
 
-    public int getImageId(){
-        return  imageId;
+    public byte[] getImageIcon(){
+        return  imageIcon;
     }
 
     public float getTextSize(){

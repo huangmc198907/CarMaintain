@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.exanmple.db.MyCarMaintainRecordBean;
 import com.exanmple.myview.Fruit;
 import com.exanmple.myview.FruitAdapter;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -253,8 +257,9 @@ public class LastSetActivity extends AppCompatActivity {
     // 初始化数据
     private void initFruits(){
         List recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
         List <String> recordString = new ArrayList<>();
-        if (null != recordList) {
+        if (null != recordList && null != carList) {
             for(int i=0; i < recordList.size(); i++){
                 boolean addFlag = true;
                 MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) recordList.get(i);
@@ -266,7 +271,15 @@ public class LastSetActivity extends AppCompatActivity {
                 }
                 if(addFlag == true){
                     String recordStrings = buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate);
-                    Fruit a = new Fruit(recordStrings,R.drawable.baojun);
+                    byte []b = new byte[0];
+                    for(int j = 0; j < carList.size(); j++){
+                        CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(j);
+                        if(myCarMaintainRecordBean.name.equals(carMaintainBean.name)){
+                            b = carMaintainBean.icon_byte;
+                            break;
+                        }
+                    }
+                    Fruit a = new Fruit(recordStrings,b);
                     float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
                     a.setTextSize(text_size);
                     recordString.add(recordStrings);

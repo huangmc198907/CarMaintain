@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         myDBMaster.openDataBase();
 
         if(myDBMaster.dbIsCreate == true)
-            new BaoJun560(MainActivity.myDBMaster);
+            new BaoJun560(this, MainActivity.myDBMaster);
 
         carSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override

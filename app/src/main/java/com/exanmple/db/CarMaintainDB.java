@@ -18,7 +18,7 @@ public class CarMaintainDB {
     public static String KEY_CAR_NAME = "name";
     public static String KEY_MAINTAIN_MILEAGE_CYCLE = "maintain_mileage_cycle";
     public static String KEY_MAINTAIN_TIME_CYCLE = "maintain_time_cycle";
-    public static String KEY_ICON_PATH = "icon_path";
+    public static String KEY_ICON_BYTE = "icon_byte";
 
     private SQLiteDatabase mDatabase;
     /** 上下文 */
@@ -44,7 +44,7 @@ public class CarMaintainDB {
         values.put(KEY_CAR_NAME, carMaintainBean.name);
         values.put(KEY_MAINTAIN_MILEAGE_CYCLE, carMaintainBean.maintain_mileage_cycle);
         values.put(KEY_MAINTAIN_TIME_CYCLE, carMaintainBean.maintain_time_cycle);
-        values.put(KEY_ICON_PATH, carMaintainBean.icon_path);
+        values.put(KEY_ICON_BYTE, carMaintainBean.icon_byte);
         return mDatabase.insert(TABLE_NAME, null, values);
     }
 
@@ -76,7 +76,7 @@ public class CarMaintainDB {
         values.put(KEY_CAR_NAME, carMaintainBean.name);
         values.put(KEY_MAINTAIN_MILEAGE_CYCLE, carMaintainBean.maintain_mileage_cycle);
         values.put(KEY_MAINTAIN_TIME_CYCLE, carMaintainBean.maintain_time_cycle);
-        values.put(KEY_ICON_PATH, carMaintainBean.icon_path);
+        values.put(KEY_ICON_BYTE, carMaintainBean.icon_byte);
         return mDatabase.update(TABLE_NAME, values, KEY_ID + "=" + id, null);
     }
 
@@ -94,7 +94,7 @@ public class CarMaintainDB {
                         KEY_CAR_NAME,
                         KEY_MAINTAIN_MILEAGE_CYCLE,
                         KEY_MAINTAIN_TIME_CYCLE,
-                        KEY_ICON_PATH },
+                        KEY_ICON_BYTE },
                 KEY_ID + "=" + id , null, null, null, null);
         return convertUtil(results);
     }
@@ -112,7 +112,7 @@ public class CarMaintainDB {
                         KEY_CAR_NAME,
                         KEY_MAINTAIN_MILEAGE_CYCLE,
                         KEY_MAINTAIN_TIME_CYCLE,
-                        KEY_ICON_PATH },
+                        KEY_ICON_BYTE },
                 null, null, null, null, null );
         return convertUtil(results);
     }
@@ -134,7 +134,7 @@ public class CarMaintainDB {
             carMaintainBean.name = cursor.getString(cursor.getColumnIndex(KEY_CAR_NAME));
             carMaintainBean.maintain_mileage_cycle = cursor.getInt(cursor.getColumnIndex(KEY_MAINTAIN_MILEAGE_CYCLE));
             carMaintainBean.maintain_time_cycle = cursor.getInt(cursor.getColumnIndex(KEY_MAINTAIN_TIME_CYCLE));
-            carMaintainBean.icon_path = cursor.getString(cursor.getColumnIndex(KEY_ICON_PATH));
+            carMaintainBean.icon_byte = cursor.getBlob(cursor.getColumnIndex(KEY_ICON_BYTE));
             mList.add(carMaintainBean);
             Log.d("TEST_DEBUG", "id="+carMaintainBean.id+" 汽车名称="+carMaintainBean.name+" 保养公里数="+carMaintainBean.maintain_mileage_cycle+" 保养周期="+carMaintainBean.maintain_time_cycle+"\n");
             cursor.moveToNext();

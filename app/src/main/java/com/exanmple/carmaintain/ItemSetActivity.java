@@ -4,14 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +35,8 @@ public class ItemSetActivity extends AppCompatActivity {
     private ExpandListViewAdapter myAdapter;
     private List<String> groupList = new ArrayList<>();
     private List<List<String>> childList = new ArrayList<>();
+    private Bitmap iconBitmap;
+    private View convertViewDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,24 +205,30 @@ public class ItemSetActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(ItemSetActivity.this);
         builder.setTitle("添加保养项目");// 设置标题
 
-        LinearLayout layout = new LinearLayout(ItemSetActivity.this);
-        layout.setOrientation(LinearLayout.VERTICAL);
+        convertViewDialog = View.inflate(getApplicationContext(), R.layout.add_dialog, null);
+        builder.setView(convertViewDialog);
 
-        final EditText item_name = new EditText(ItemSetActivity.this);
+        final EditText item_name = (EditText) convertViewDialog.findViewById(R.id.dialog_add_name);
         item_name.setHint("项目名称");
 
-        final EditText item_mileage = new EditText(ItemSetActivity.this);
+        final EditText item_mileage = (EditText) convertViewDialog.findViewById(R.id.dialog_add_mileage);
         item_mileage.setHint("更换或维修公里数周期");
         item_mileage.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        final EditText item_time = new EditText(ItemSetActivity.this);
+        final EditText item_time = (EditText) convertViewDialog.findViewById(R.id.dialog_add_time);
         item_time.setHint("更换或维修时间周期");
         item_time.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        layout.addView(item_name);
-        layout.addView(item_mileage);
-        layout.addView(item_time);
-        builder.setView(layout);
+        Button button = (Button) convertViewDialog.findViewById(R.id.dialog_add_icon_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");//选择图片
+                //intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, 1);
+            }
+        });
 
         // 为对话框设置取消按钮
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -242,6 +258,49 @@ public class ItemSetActivity extends AppCompatActivity {
             }
         });
         builder.create().show();// 使用show()方法显示对话框
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode ==RESULT_OK) {
+            if (requestCode ==1) {
+                Uri uri = data.getData();
+                iconBitmap = getBitmapFromUri(uri);//将得到的uri传给转换方法，并返回一个bitmap对象
+                ImageView imageView = (ImageView) convertViewDialog.findViewById(R.id.dialog_add_icon_view);
+                imageView.setImageBitmap(iconBitmap);
+            }
+        }
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        Bitmap bitmap =null;
+        try {
+            BitmapFactory.Options options =new BitmapFactory.Options();
+            int picWidth = options.outWidth;
+            int picHeight = options.outHeight;
+            WindowManager windowManager = getWindowManager();
+            Display display = windowManager.getDefaultDisplay();
+            int screenWidth = display.getWidth();
+            int screenHeight = display.getHeight();
+            options.inSampleSize =1;
+            if (picWidth > picHeight) {
+                if (picWidth > screenWidth)
+                    options.inSampleSize = picWidth / screenWidth;
+            }else {
+                if (picHeight > screenHeight)
+                    options.inSampleSize = picHeight / screenHeight;
+            }
+
+            options.inJustDecodeBounds =false;
+            bitmap = BitmapFactory.decodeStream(getContentResolver()
+                    .openInputStream(uri),null, options);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return bitmap;
     }
 
     private void addNewItem(String car_name, String item_name, String item_mileage, String item_time){

@@ -56,7 +56,7 @@ public class MyDBMaster {
             CarMaintainDB.KEY_CAR_NAME + " text not null , " +
             CarMaintainDB.KEY_MAINTAIN_MILEAGE_CYCLE + " integer , " +
             CarMaintainDB.KEY_MAINTAIN_TIME_CYCLE + " integer , " +
-            CarMaintainDB.KEY_ICON_PATH + " text not null );";
+            CarMaintainDB.KEY_ICON_BYTE + " blob not null );";
 
     /** 创建该数据库下CarMaintainItem表的语句 */
     private static final String mCarMaintainItemStr = "create table if not exists " + CarMaintainItemDB.TABLE_NAME + " (" +

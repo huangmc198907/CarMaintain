@@ -1,29 +1,52 @@
 package com.exanmple.carmaintain;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.ContactsContract;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.exanmple.db.BaoJun560;
 import com.exanmple.db.CarMaintainBean;
 import com.exanmple.db.CarMaintainItemBean;
 import com.exanmple.db.MyCarMaintainRecordBean;
 import com.exanmple.myview.Fruit;
 import com.exanmple.myview.FruitAdapter;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CarSelectActivity extends AppCompatActivity {
     // fruitList用于存储数据
@@ -31,6 +54,8 @@ public class CarSelectActivity extends AppCompatActivity {
     private String car_name = null;
     private static boolean longClickFlag = false;
     private FruitAdapter adapter;
+    private Bitmap iconBitmap;
+    private View convertViewDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +69,7 @@ public class CarSelectActivity extends AppCompatActivity {
         textView.setTextSize(text_size);
 
         addButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
                 TextView textView = findViewById(R.id.car_select_text);
@@ -51,25 +77,22 @@ public class CarSelectActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(CarSelectActivity.this);
                 builder.setTitle("添加新车型");// 设置标题
+                convertViewDialog = View.inflate(getApplicationContext(), R.layout.add_dialog, null);
+                builder.setView(convertViewDialog);
 
-                LinearLayout layout = new LinearLayout(CarSelectActivity.this);
-                layout.setOrientation(LinearLayout.VERTICAL);
-
-                final EditText car_name = new EditText(CarSelectActivity.this);
-                car_name.setHint("车辆名称和型号");
-
-                final EditText car_mileage = new EditText(CarSelectActivity.this);
-                car_mileage.setHint("车辆保养公里数周期");
-                car_mileage.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-                final EditText car_time = new EditText(CarSelectActivity.this);
-                car_time.setHint("车辆保养时间周期");
-                car_time.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-                layout.addView(car_name);
-                layout.addView(car_mileage);
-                layout.addView(car_time);
-                builder.setView(layout);
+                final EditText car_name = (EditText) convertViewDialog.findViewById(R.id.dialog_add_name);
+                final EditText car_mileage = (EditText) convertViewDialog.findViewById(R.id.dialog_add_mileage);
+                final EditText car_time = (EditText) convertViewDialog.findViewById(R.id.dialog_add_time);
+                Button button = (Button) convertViewDialog.findViewById(R.id.dialog_add_icon_button);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("image/*");//选择图片
+                        //intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        startActivityForResult(intent, 1);
+                    }
+                });
 
                 // 为对话框设置取消按钮
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -147,6 +170,49 @@ public class CarSelectActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode ==RESULT_OK) {
+            if (requestCode ==1) {
+                Uri uri = data.getData();
+                iconBitmap = getBitmapFromUri(uri);//将得到的uri传给转换方法，并返回一个bitmap对象
+                ImageView imageView = (ImageView) convertViewDialog.findViewById(R.id.dialog_add_icon_view);
+                imageView.setImageBitmap(iconBitmap);
+            }
+        }
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        Bitmap bitmap =null;
+        try {
+            BitmapFactory.Options options =new BitmapFactory.Options();
+            int picWidth = options.outWidth;
+            int picHeight = options.outHeight;
+            WindowManager windowManager = getWindowManager();
+            Display display = windowManager.getDefaultDisplay();
+            int screenWidth = display.getWidth();
+            int screenHeight = display.getHeight();
+            options.inSampleSize =1;
+            if (picWidth > picHeight) {
+                if (picWidth > screenWidth)
+                    options.inSampleSize = picWidth / screenWidth;
+            }else {
+                if (picHeight > screenHeight)
+                    options.inSampleSize = picHeight / screenHeight;
+            }
+            Log.d("=====", "getBitmapFromUri: inSampleSize="+options.inSampleSize);
+            options.inJustDecodeBounds =false;
+            bitmap = BitmapFactory.decodeStream(getContentResolver()
+                    .openInputStream(uri),null, options);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return bitmap;
+    }
+
     private void addNewCar(String car_name, String car_mileage, String car_time){
         List car_list = MainActivity.myDBMaster.carMaintainDB.queryDataList();
         if(null != car_list){
@@ -165,7 +231,13 @@ public class CarSelectActivity extends AppCompatActivity {
             carMaintainBean.name = car_name;
             carMaintainBean.maintain_mileage_cycle = Integer.parseInt(car_mileage);
             carMaintainBean.maintain_time_cycle = Integer.parseInt(car_time);
-            carMaintainBean.icon_path = "";
+            if(null != iconBitmap) {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                BaoJun560.compressBitmap(iconBitmap).compress(Bitmap.CompressFormat.PNG, 100, os);
+                carMaintainBean.icon_byte = os.toByteArray();
+            }else{
+                carMaintainBean.icon_byte = new byte[0];
+            }
             MainActivity.myDBMaster.carMaintainDB.insertData(carMaintainBean);
             Log.d("TEST_DEBUG", "addNewCar: 汽车名称："+carMaintainBean.name+" 保养公里数："+carMaintainBean.maintain_mileage_cycle+" 保养时间间隔："+carMaintainBean.maintain_time_cycle);
             fruitList.clear();
@@ -290,7 +362,7 @@ public class CarSelectActivity extends AppCompatActivity {
         if (null != carlist) {
             for(int i=0; i < carlist.size(); i++){
                 CarMaintainBean carMaintainBean = (CarMaintainBean) carlist.get(i);
-                Fruit a = new Fruit("" + carMaintainBean.name, R.drawable.baojun);
+                Fruit a = new Fruit("" + carMaintainBean.name, carMaintainBean.icon_byte);
                 float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
                 a.setTextSize(text_size);
                 car_name = carMaintainBean.name;
@@ -302,7 +374,18 @@ public class CarSelectActivity extends AppCompatActivity {
     private void setCarDialog(final String car_name){
         final EditText inputServer = new EditText(CarSelectActivity.this);
         AlertDialog.Builder builder = new AlertDialog.Builder(CarSelectActivity.this);
-        builder.setTitle("输入车牌号").setIcon(R.drawable.baojun).setView(inputServer)
+        List carlist = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if(null != carlist){
+            for(int i = 0; i < carlist.size(); i++){
+                CarMaintainBean carMaintainBean = (CarMaintainBean)carlist.get(i);
+                if(car_name.equals(carMaintainBean.name)){
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(carMaintainBean.icon_byte, 0, carMaintainBean.icon_byte.length);
+                    builder.setIcon(new BitmapDrawable(bitmap));
+                    break;
+                }
+            }
+        }
+        builder.setTitle("输入车牌号").setView(inputServer)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
