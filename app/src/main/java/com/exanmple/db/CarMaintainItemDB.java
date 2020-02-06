@@ -18,6 +18,7 @@ public class CarMaintainItemDB {
     public static String KEY_ITEM_NAME = "item_name";
     public static String KEY_ITEM_MILEAGE_CYCLE = "item_mileage_cycle";
     public static String KEY_ITEM_TIME_CYCLE = "item_time_cycle";
+    public static String KEY_ICON_BYTE = "icon_byte";
 
     private SQLiteDatabase mDatabase;
     /** 上下文 */
@@ -44,6 +45,7 @@ public class CarMaintainItemDB {
         values.put(KEY_ITEM_NAME, carMaintainItemBean.item_name);
         values.put(KEY_ITEM_MILEAGE_CYCLE, carMaintainItemBean.item_mileage_cycle);
         values.put(KEY_ITEM_TIME_CYCLE, carMaintainItemBean.item_time_cycle);
+        values.put(KEY_ICON_BYTE, carMaintainItemBean.icon_byte);
         return mDatabase.insert(TABLE_NAME, null, values);
     }
 
@@ -76,6 +78,7 @@ public class CarMaintainItemDB {
         values.put(KEY_ITEM_NAME, carMaintainItemBean.item_name);
         values.put(KEY_ITEM_MILEAGE_CYCLE, carMaintainItemBean.item_mileage_cycle);
         values.put(KEY_ITEM_TIME_CYCLE, carMaintainItemBean.item_time_cycle);
+        values.put(KEY_ICON_BYTE, carMaintainItemBean.icon_byte);
         return mDatabase.update(TABLE_NAME, values, KEY_ID + "=" + id, null);
     }
 
@@ -93,7 +96,8 @@ public class CarMaintainItemDB {
                         KEY_CAR_NAME,
                         KEY_ITEM_NAME,
                         KEY_ITEM_MILEAGE_CYCLE,
-                        KEY_ITEM_TIME_CYCLE },
+                        KEY_ITEM_TIME_CYCLE,
+                        KEY_ICON_BYTE },
                 KEY_ID + "=" + id , null, null, null, null);
         return convertUtil(results);
     }
@@ -111,7 +115,8 @@ public class CarMaintainItemDB {
                         KEY_CAR_NAME,
                         KEY_ITEM_NAME,
                         KEY_ITEM_MILEAGE_CYCLE,
-                        KEY_ITEM_TIME_CYCLE },
+                        KEY_ITEM_TIME_CYCLE,
+                        KEY_ICON_BYTE },
                 null, null, null, null, null);
         return convertUtil(results);
     }
@@ -134,6 +139,7 @@ public class CarMaintainItemDB {
             carMaintainItemBean.item_name = cursor.getString(cursor.getColumnIndex(KEY_ITEM_NAME));
             carMaintainItemBean.item_mileage_cycle = cursor.getInt(cursor.getColumnIndex(KEY_ITEM_MILEAGE_CYCLE));
             carMaintainItemBean.item_time_cycle = cursor.getInt(cursor.getColumnIndex(KEY_ITEM_TIME_CYCLE));
+            carMaintainItemBean.icon_byte = cursor.getBlob(cursor.getColumnIndex(KEY_ICON_BYTE));
             mList.add(carMaintainItemBean);
             cursor.moveToNext();
         }

@@ -23,10 +23,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.exanmple.db.BaoJun560;
 import com.exanmple.db.CarMaintainBean;
 import com.exanmple.db.CarMaintainItemBean;
 import com.exanmple.myview.ExpandListViewAdapter;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +37,13 @@ public class ItemSetActivity extends AppCompatActivity {
     private ExpandListViewAdapter myAdapter;
     private List<String> groupList = new ArrayList<>();
     private List<List<String>> childList = new ArrayList<>();
+    private List<byte[]> groupIconList = new ArrayList<>();
+    private List<List<byte[]>> childIconList = new ArrayList<>();
     private Bitmap iconBitmap;
     private View convertViewDialog;
+    private List carList;
+    private List itemList;
+    private List recordList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,35 +59,48 @@ public class ItemSetActivity extends AppCompatActivity {
         return item_name+"  （"+item_mileage + "公里，"+item_time+"个月）";
     }
 
+    private void upgradeView(){
+        groupList.clear();
+        childList.clear();
+        groupIconList.clear();
+        childIconList.clear();
+        //expandableListView.clearFocus();
+        initView();
+    }
+
     private void initView() {
         expandableListView = (ExpandableListView) findViewById(R.id.item_set_maintain_list);
 
         TextView textView = (TextView)findViewById(R.id.item_set_text);
 
-        List carlist = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-        List itemlist = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if(null != itemList) itemList.clear();
+        itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
 
-        if (null != carlist && null != itemlist) {
-            textView.setText("已设置车辆信息");
-            for(int i=0; i < carlist.size(); i++) {
-                CarMaintainBean carMaintainBean = (CarMaintainBean) carlist.get(i);
+        if (null != carList && null != itemList) {
+            textView.setText("");
+            for(int i=0; i < carList.size(); i++) {
+                CarMaintainBean carMaintainBean = (CarMaintainBean) carList.get(i);
                 Log.d("TEST_DEBUG","车辆:"+carMaintainBean.name);
                 List <String> item = new ArrayList<>();
-                for (int j = 0; j < itemlist.size(); j++) {
-                    CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean) itemlist.get(j);
+                List <byte[]> itemIcon = new ArrayList<>();
+                for (int j = 0; j < itemList.size(); j++) {
+                    CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean) itemList.get(j);
                     if (carMaintainBean.name.equals(carMaintainItemBean.name)) {
                         item.add(buildItemString(carMaintainItemBean.item_name, carMaintainItemBean.item_mileage_cycle,carMaintainItemBean.item_time_cycle));
+                        itemIcon.add(carMaintainItemBean.icon_byte);
                     }
                 }
                 String []itemString = new String[item.size()];
                 for(int j=0; j < item.size(); j++)
                     itemString[j] = item.get(j);
 
-                addData(carMaintainBean.name,itemString);
+                addData(carMaintainBean.name,itemString, carMaintainBean.icon_byte, itemIcon);
             }
         }
 
-        myAdapter = new ExpandListViewAdapter(this,groupList,childList);
+        myAdapter = new ExpandListViewAdapter(this,groupList,childList, groupIconList, childIconList);
         float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
         myAdapter.setTextSize(text_size, text_size * 4 / 5);
         expandableListView.setAdapter(myAdapter);
@@ -111,10 +131,11 @@ public class ItemSetActivity extends AppCompatActivity {
     }
 
     private void changeItem(String car_name, String item_string){
-        List item_list = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
-        if(null != item_list){
-            for(int i=0; i < item_list.size(); i++){
-                CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean)item_list.get(i);
+        if(null != itemList) itemList.clear();
+        itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+        if(null != itemList){
+            for(int i=0; i < itemList.size(); i++){
+                CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean)itemList.get(i);
                 String item_build_string = buildItemString(carMaintainItemBean.item_name, carMaintainItemBean.item_mileage_cycle, carMaintainItemBean.item_time_cycle);
                 if(car_name.equals(carMaintainItemBean.name) && item_string.equals(item_build_string)){
                     changeItemDialog(carMaintainItemBean);
@@ -163,10 +184,7 @@ public class ItemSetActivity extends AppCompatActivity {
             public void onClick(DialogInterface arg0, int arg1) {
                 // TODO Auto-generated method stub
                 MainActivity.myDBMaster.carMaintainItemDB.deleteData(carMaintainItemBean.id);
-                groupList.clear();
-                childList.clear();
-                //expandableListView.clearFocus();
-                initView();
+                upgradeView();
             }
         });
 
@@ -304,10 +322,11 @@ public class ItemSetActivity extends AppCompatActivity {
     }
 
     private void addNewItem(String car_name, String item_name, String item_mileage, String item_time){
-        List item_list = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
-        if(null != item_list){
-            for(int i = 0; i < item_list.size(); i++){
-                CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean)item_list.get(i);
+        if(null != itemList) itemList.clear();
+        itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+        if(null != itemList){
+            for(int i = 0; i < itemList.size(); i++){
+                CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean)itemList.get(i);
                 if(car_name.equals(carMaintainItemBean.name) && item_name.equals((carMaintainItemBean.item_name))){
                     TextView textView = findViewById(R.id.item_set_text);
                     textView.setText("已有该保养项目");
@@ -321,25 +340,41 @@ public class ItemSetActivity extends AppCompatActivity {
             carMaintainItemBean.item_name = item_name;
             carMaintainItemBean.item_mileage_cycle = Integer.parseInt(item_mileage);
             carMaintainItemBean.item_time_cycle = Integer.parseInt(item_time);
+            if(null != iconBitmap) {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                BaoJun560.compressBitmap(iconBitmap).compress(Bitmap.CompressFormat.PNG, 100, os);
+                carMaintainItemBean.icon_byte = os.toByteArray();
+            }else{
+                carMaintainItemBean.icon_byte = new byte[0];
+            }
             MainActivity.myDBMaster.carMaintainItemDB.insertData(carMaintainItemBean);
             Log.d("TEST_DEBUG", "addNewCar: 汽车名称："+carMaintainItemBean.name+" 保养项目名称："+carMaintainItemBean.item_name+" 保养公里数："+carMaintainItemBean.item_mileage_cycle+" 保养时间间隔："+carMaintainItemBean.item_time_cycle);
-            groupList.clear();
-            childList.clear();
-            //expandableListView.clearFocus();
-            initView();
+            upgradeView();
         }
     }
 
     /**
      * 用来添加数据的方法
      */
-    private void addData(String group, String[] friend) {
+    private void addData(String group, String[] friend, byte[] groupIcon, List<byte[]> friendIcon) {
         groupList.add(group);
+        groupIconList.add(groupIcon);
         //每一个item打开又是一个不同的list集合
         List<String> childitem = new ArrayList<>();
         for (int i = 0; i < friend.length; i++) {
             childitem.add(friend[i]);
         }
         childList.add(childitem);
+        childIconList.add(friendIcon);
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        if(level == TRIM_MEMORY_UI_HIDDEN){
+            if(null != carList) carList.clear();
+            if(null != itemList) itemList.clear();
+            if(null != recordList) recordList.clear();
+        }
     }
 }

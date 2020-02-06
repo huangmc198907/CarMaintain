@@ -1,6 +1,8 @@
 package com.exanmple.myview;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -112,6 +115,12 @@ public class InnerAdapter extends BaseExpandableListAdapter {
         float text_size = MainActivity.getTextSize(activity, activity.getWindowManager().getDefaultDisplay().getWidth());
         textView.setTextSize(text_size);
         modeText.setTextSize(text_size * 4 / 5);
+        byte[] bt = secondListView.get(i).getSecondList().get(i1).getIconbyte();
+        if(null != bt && bt.length > 0) {
+            ImageView imageView = (ImageView)view.findViewById(R.id.third_img);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bt, 0, bt.length);
+            imageView.setImageBitmap(bitmap);
+        }
         return view;
 
         /*

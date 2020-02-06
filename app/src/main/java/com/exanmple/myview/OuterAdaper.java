@@ -1,6 +1,8 @@
 package com.exanmple.myview;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.exanmple.carmaintain.MainActivity;
@@ -94,6 +97,12 @@ public class OuterAdaper extends BaseExpandableListAdapter {
         textView.setTextSize(text_size);
         number.setTextSize(text_size * 4 / 5);
         addText.setTextSize(text_size * 4 / 5);
+        byte[] bt = firstList.get(groupPosition).getIconbyte();
+        if(null != bt && bt.length > 0){
+            ImageView imageView = (ImageView)convertView.findViewById(R.id.first_img);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bt, 0, bt.length);
+            imageView.setImageBitmap(bitmap);
+        }
         return convertView;
         /*
         TextView textView = new TextView(activity);

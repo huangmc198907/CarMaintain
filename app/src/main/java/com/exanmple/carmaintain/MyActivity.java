@@ -31,13 +31,17 @@ public class MyActivity extends AppCompatActivity {
             maintainRecordButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(MyActivity.this,MaintainRecordActivity.class));
+                    Intent intent = new Intent(MyActivity.this,MaintainRecordActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             });
             nextMaintinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(MyActivity.this,NextActivity.class));
+                    Intent intent = new Intent(MyActivity.this,NextActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             });
         }

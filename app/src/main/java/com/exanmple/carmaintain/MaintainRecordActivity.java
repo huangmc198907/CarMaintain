@@ -31,6 +31,9 @@ import java.util.regex.Pattern;
 public class MaintainRecordActivity extends AppCompatActivity {
     private ExpandableListView expandableListView;
     List<ThreeExpandListView> threeExpandList=new ArrayList<>();
+    private List carList;
+    private List itemList;
+    private List recordList;
 
     private String buildRecordString(String car_name, String license_plate){
         return "型号："+car_name+" 车牌："+license_plate;
@@ -41,11 +44,12 @@ public class MaintainRecordActivity extends AppCompatActivity {
     }
 
     private boolean isMileageError(String carAndlicenseString, String mileage){
-        List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != recordList) recordList.clear();
+        recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
         String car_name = "";
-        if(null != maintainList){
-            for(int i=0; i < maintainList.size(); i++){
-                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)maintainList.get(i);
+        if(null != recordList){
+            for(int i=0; i < recordList.size(); i++){
+                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)recordList.get(i);
                 if(carAndlicenseString.equals(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate))){
                     if(mileage.equals(""+myCarMaintainRecordBean.item_mileage)) {
                         return true;
@@ -82,12 +86,15 @@ public class MaintainRecordActivity extends AppCompatActivity {
     }
 
     private void addMaintainItemRecord(String carAndlicenseString, final String mileage, final String time){
-        List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != recordList) recordList.clear();
+        recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
         String car_name = "";
         String license_plate = "";
-        if(null != maintainList){
-            for(int i = 0; i < maintainList.size(); i++) {
-                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) maintainList.get(i);
+        if(null != recordList){
+            for(int i = 0; i < recordList.size(); i++) {
+                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) recordList.get(i);
                 if(carAndlicenseString.equals(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate))) {
                     car_name = myCarMaintainRecordBean.name;
                     license_plate = myCarMaintainRecordBean.license_plate;
@@ -96,7 +103,6 @@ public class MaintainRecordActivity extends AppCompatActivity {
             }
         }
         if(true == isMileageError(carAndlicenseString, mileage)) {
-            List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
             if(null != carList){
                 for(int i = 0; i < carList.size(); i++) {
                     CarMaintainBean carMaintainBean = (CarMaintainBean) carList.get(i);
@@ -118,8 +124,8 @@ public class MaintainRecordActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MaintainRecordActivity.this);
         builder.setTitle("选择保养项目");
 
-        List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-        List itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+        if(null != itemList) itemList.clear();
+        itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
         if(null == carList || null == itemList){
             return;
         }
@@ -283,10 +289,11 @@ public class MaintainRecordActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 // TODO Auto-generated method stub
-                List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
-                if(null != maintainList){
-                    for(int i=0; i < maintainList.size(); i++){
-                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)maintainList.get(i);
+                if(null != recordList) recordList.clear();
+                recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+                if(null != recordList){
+                    for(int i=0; i < recordList.size(); i++){
+                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)recordList.get(i);
                         if(carAndlicenseString.equals(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate))){
                             MainActivity.myDBMaster.myCarMaintainRecordDB.deleteData(myCarMaintainRecordBean.id);
                         }
@@ -341,12 +348,13 @@ public class MaintainRecordActivity extends AppCompatActivity {
     }
 
     private void addMaintainTtem(final String carAndLicense, final String mileageAndDate, List <String> itemStringList){
-        final List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != recordList) recordList.clear();
+        recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
         String car_name = "";
         String license_plate = "";
-        if(null != maintainList){
-            for(int i = 0; i < maintainList.size(); i++) {
-                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) maintainList.get(i);
+        if(null != recordList){
+            for(int i = 0; i < recordList.size(); i++) {
+                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) recordList.get(i);
                 if(carAndLicense.equals(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate))) {
                     car_name = myCarMaintainRecordBean.name;
                     license_plate = myCarMaintainRecordBean.license_plate;
@@ -360,7 +368,8 @@ public class MaintainRecordActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MaintainRecordActivity.this);
         builder.setTitle("修改保养项目");
 
-        List itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+        if(null != itemList) itemList.clear();
+        itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
         if(null == itemList){
             return;
         }
@@ -436,8 +445,8 @@ public class MaintainRecordActivity extends AppCompatActivity {
                     boolean flag = false;
                     String time = "";
                     int deleteId = 0;
-                    for(int j = 0; j < maintainList.size(); j++){
-                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)maintainList.get(j);
+                    for(int j = 0; j < recordList.size(); j++){
+                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)recordList.get(j);
                         if (finalCar_name.equals(myCarMaintainRecordBean.name) && finalLicense_plate.equals(myCarMaintainRecordBean.license_plate) &&
                                 mileageAndDate.equals(buildMileageAndDate(""+myCarMaintainRecordBean.item_mileage, myCarMaintainRecordBean.item_date))) {
                             time = myCarMaintainRecordBean.item_date;
@@ -492,10 +501,11 @@ public class MaintainRecordActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 // TODO Auto-generated method stub
-                List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
-                if(null != maintainList){
-                    for(int i=0; i < maintainList.size(); i++){
-                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)maintainList.get(i);
+                if(null != recordList) recordList.clear();
+                recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+                if(null != recordList){
+                    for(int i=0; i < recordList.size(); i++){
+                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)recordList.get(i);
                         if(carAndLicense.equals(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate)) &&
                                 mileageAndDate.equals(buildMileageAndDate(""+myCarMaintainRecordBean.item_mileage, myCarMaintainRecordBean.item_date))){
                             MainActivity.myDBMaster.myCarMaintainRecordDB.deleteData(myCarMaintainRecordBean.id);
@@ -561,10 +571,11 @@ public class MaintainRecordActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 // TODO Auto-generated method stub
-                List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
-                if(null != maintainList){
-                    for(int i=0; i < maintainList.size(); i++){
-                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)maintainList.get(i);
+                if(null != recordList) recordList.clear();
+                recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+                if(null != recordList){
+                    for(int i=0; i < recordList.size(); i++){
+                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)recordList.get(i);
                         if(carAndLicense.equals(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate)) &&
                                 mileageAndDate.equals(buildMileageAndDate(""+myCarMaintainRecordBean.item_mileage, myCarMaintainRecordBean.item_date)) &&
                                         item.equals(myCarMaintainRecordBean.item_name)){
@@ -583,11 +594,17 @@ public class MaintainRecordActivity extends AppCompatActivity {
 
     //创造数据
     private void initData() {
-        List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
-        if(null != maintainList){
+        if(null != recordList) recordList.clear();
+        recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != carList) carList.clear();
+        if(null != itemList) itemList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+        if(null != recordList){
             List<String> carStringList=new ArrayList<>();
-            for(int i = 0; i < maintainList.size(); i++) {
-                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) maintainList.get(i);
+            List<String> carNameStringList=new ArrayList<>();
+            for(int i = 0; i < recordList.size(); i++) {
+                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) recordList.get(i);
                 boolean flag = true;
                 for (int j = 0; j < carStringList.size(); j++) {
                     if (buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate).equals(carStringList.get(j))) {
@@ -597,27 +614,35 @@ public class MaintainRecordActivity extends AppCompatActivity {
                 }
                 if (flag == true) {
                     carStringList.add(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate));
+                    carNameStringList.add(myCarMaintainRecordBean.name);
                 }
             }
             for(int i = 0; i < carStringList.size(); i++){
                 ThreeExpandListView threeExpandListView=new ThreeExpandListView();
                 threeExpandListView.setName(carStringList.get(i));
+                for(int j = 0; j < carList.size(); j++){
+                    CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(j);
+                    if(carNameStringList.get(i).equals(carMaintainBean.name)){
+                        threeExpandListView.setIconbyte(carMaintainBean.icon_byte);
+                        break;
+                    }
+                }
                 List<String> mileageIntList = new ArrayList<>();
-                List<String> dateList = new ArrayList<>();
-                List<List<String>> itemList = new ArrayList<>();
+                List<String> dateStringList = new ArrayList<>();
+                List<List<String>> itemStringList = new ArrayList<>();
                 mileageIntList.clear();
-                dateList.clear();
-                itemList.clear();
-                mileageIntList.add(""+((MyCarMaintainRecordBean)maintainList.get(0)).item_mileage);
-                dateList.add(((MyCarMaintainRecordBean)maintainList.get(0)).item_date);
-                itemList.add(new ArrayList<String>());
-                for(int j = 0; j < maintainList.size(); j++){
-                    MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) maintainList.get(j);
+                dateStringList.clear();
+                itemStringList.clear();
+                mileageIntList.add(""+((MyCarMaintainRecordBean)recordList.get(0)).item_mileage);
+                dateStringList.add(((MyCarMaintainRecordBean)recordList.get(0)).item_date);
+                itemStringList.add(new ArrayList<String>());
+                for(int j = 0; j < recordList.size(); j++){
+                    MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) recordList.get(j);
                     boolean flag = true;
                     if(buildRecordString(myCarMaintainRecordBean.name, myCarMaintainRecordBean.license_plate).equals(carStringList.get(i))) {
                         for(int k = 0; k < mileageIntList.size(); k++) {
                             if (mileageIntList.get(k).equals("" + myCarMaintainRecordBean.item_mileage)) {
-                                itemList.get(k).add(myCarMaintainRecordBean.item_name);
+                                itemStringList.get(k).add(myCarMaintainRecordBean.item_name);
                                 flag = false;
                                 break;
                             }
@@ -626,8 +651,8 @@ public class MaintainRecordActivity extends AppCompatActivity {
                             List<String> tmp = new ArrayList<>();
                             tmp.add(myCarMaintainRecordBean.item_name);
                             mileageIntList.add(""+myCarMaintainRecordBean.item_mileage);
-                            dateList.add(myCarMaintainRecordBean.item_date);
-                            itemList.add(tmp);
+                            dateStringList.add(myCarMaintainRecordBean.item_date);
+                            itemStringList.add(tmp);
                         }
                     }
                 }
@@ -652,11 +677,19 @@ public class MaintainRecordActivity extends AppCompatActivity {
                     for(int k = 0; k < mileageIntList.size(); k++){
                         if(mileageIntList.get(k).equals(""+mileagebuf[j])){
                             ThreeExpandListView.FirstListView firstListView=new ThreeExpandListView.FirstListView();
-                            firstListView.setName(buildMileageAndDate(mileageIntList.get(k), dateList.get(k)));
+                            firstListView.setName(buildMileageAndDate(mileageIntList.get(k), dateStringList.get(k)));
                             List<ThreeExpandListView.SecondListView> secondLists = new ArrayList<>();
-                            for(int g = 0; g < itemList.get(k).size(); g++){
+                            for(int g = 0; g < itemStringList.get(k).size(); g++){
                                 ThreeExpandListView.SecondListView secondListView = new ThreeExpandListView.SecondListView();
-                                secondListView.setName(itemList.get(k).get(g));
+                                secondListView.setName(itemStringList.get(k).get(g));
+                                for(int l = 0; l < itemList.size(); l++){
+                                    CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean)itemList.get(l);
+                                    if(carNameStringList.get(i).equals(carMaintainItemBean.name) &&
+                                            itemStringList.get(k).get(g).equals(carMaintainItemBean.item_name)){
+                                        secondListView.setIconbyte(carMaintainItemBean.icon_byte);
+                                        break;
+                                    }
+                                }
                                 secondLists.add(secondListView);
                             }
                             firstListView.setSecondList(secondLists);
@@ -721,6 +754,16 @@ public class MaintainRecordActivity extends AppCompatActivity {
             final OuterAdaper adapter=new OuterAdaper(null,this);
             expandableListView.setAdapter(adapter);
             Log.d("++++++", "initData: no no no ");
+        }
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        if(level == TRIM_MEMORY_UI_HIDDEN){
+            if(null != carList) carList.clear();
+            if(null != itemList) itemList.clear();
+            if(null != recordList) recordList.clear();
         }
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 public class ThreeExpandListView {
     //国家名
     private String name;
+    private byte[] icon_byte;
     //国家的省集合
     private List<FirstListView> FirstListViews;
 
@@ -18,6 +19,14 @@ public class ThreeExpandListView {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public byte[] getIconbyte() {
+        return icon_byte;
+    }
+
+    public void setIconbyte(byte [] bt) {
+        this.icon_byte = bt;
     }
 
     public List<FirstListView> getFirstListViews() {
@@ -59,6 +68,7 @@ public class ThreeExpandListView {
     public static class SecondListView{
         //城市名称
         private String name;
+        private byte[] icon_byte;
 
         public String getName() {
             return name;
@@ -66,6 +76,14 @@ public class ThreeExpandListView {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public byte[] getIconbyte() {
+            return icon_byte;
+        }
+
+        public void setIconbyte(byte [] bt) {
+            this.icon_byte = bt;
         }
     }
 }

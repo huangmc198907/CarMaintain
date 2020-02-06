@@ -56,6 +56,9 @@ public class CarSelectActivity extends AppCompatActivity {
     private FruitAdapter adapter;
     private Bitmap iconBitmap;
     private View convertViewDialog;
+    private List carList;
+    private List itemList;
+    private List recordList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,10 +217,11 @@ public class CarSelectActivity extends AppCompatActivity {
     }
 
     private void addNewCar(String car_name, String car_mileage, String car_time){
-        List car_list = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-        if(null != car_list){
-            for(int i = 0; i < car_list.size(); i++){
-                CarMaintainBean carMaintainBean = (CarMaintainBean)car_list.get(i);
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if(null != carList){
+            for(int i = 0; i < carList.size(); i++){
+                CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(i);
                 if(car_name.equals(carMaintainBean.name)){
                     TextView textView = findViewById(R.id.car_select_text);
                     textView.setText("已有该车型");
@@ -249,12 +253,13 @@ public class CarSelectActivity extends AppCompatActivity {
     private void selectItemCopyFromCar(final String car_name, String car_mileage, String car_time){
         AlertDialog.Builder builder = new AlertDialog.Builder(CarSelectActivity.this);
         builder.setTitle("选择需要复制的保养项目车型");
-        List list = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-        if(null != list) {
-            final String[] items = new String[list.size()];// 创建一个存放选项的数组
-            final boolean[] checkedItems = new boolean[list.size()];// 存放选中状态，true为选中
-            for(int i=0; i < list.size(); i++){
-                CarMaintainBean carMaintainBean = (CarMaintainBean)list.get(i);
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if(null != carList) {
+            final String[] items = new String[carList.size()];// 创建一个存放选项的数组
+            final boolean[] checkedItems = new boolean[carList.size()];// 存放选中状态，true为选中
+            for(int i=0; i < carList.size(); i++){
+                CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(i);
                 items[i] = carMaintainBean.name;
                 checkedItems[i] = false;
             }
@@ -287,7 +292,8 @@ public class CarSelectActivity extends AppCompatActivity {
                         }
                     }
                     Log.d("TEST_DEBUG", "选择了" + str);
-                    List itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+                    if(null != itemList) itemList.clear();
+                    itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
                     if(null != itemList){
                         for(int i = 0; i < itemList.size(); i++){
                             CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean)itemList.get(i);
@@ -321,28 +327,31 @@ public class CarSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 // TODO Auto-generated method stub
-                List list = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-                if(null != list) {
-                    for (int i = 0; i < list.size(); i++) {
-                        CarMaintainBean carMaintainBean = (CarMaintainBean) list.get(i);
+                if(null != carList) carList.clear();
+                carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+                if(null != carList) {
+                    for (int i = 0; i < carList.size(); i++) {
+                        CarMaintainBean carMaintainBean = (CarMaintainBean) carList.get(i);
                         if (car_name.equals(carMaintainBean.name)) {
                             MainActivity.myDBMaster.carMaintainDB.deleteData(carMaintainBean.id);
                         }
                     }
                 }
-                list = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
-                if(null != list) {
-                    for (int i = 0; i < list.size(); i++) {
-                        CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean) list.get(i);
+                if(null != itemList) itemList.clear();
+                itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+                if(null != itemList) {
+                    for (int i = 0; i < itemList.size(); i++) {
+                        CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean) itemList.get(i);
                         if (car_name.equals(carMaintainItemBean.name)) {
                             MainActivity.myDBMaster.carMaintainItemDB.deleteData(carMaintainItemBean.id);
                         }
                     }
                 }
-                list = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
-                if(null != list) {
-                    for (int i = 0; i < list.size(); i++) {
-                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) list.get(i);
+                if(null != recordList) recordList.clear();
+                recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+                if(null != recordList) {
+                    for (int i = 0; i < recordList.size(); i++) {
+                        MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) recordList.get(i);
                         if (car_name.equals(myCarMaintainRecordBean.name)) {
                             MainActivity.myDBMaster.myCarMaintainRecordDB.deleteData(myCarMaintainRecordBean.id);
                         }
@@ -358,10 +367,11 @@ public class CarSelectActivity extends AppCompatActivity {
 
     // 初始化数据
     private void initFruits(){
-        List carlist = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-        if (null != carlist) {
-            for(int i=0; i < carlist.size(); i++){
-                CarMaintainBean carMaintainBean = (CarMaintainBean) carlist.get(i);
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if (null != carList) {
+            for(int i=0; i < carList.size(); i++){
+                CarMaintainBean carMaintainBean = (CarMaintainBean) carList.get(i);
                 Fruit a = new Fruit("" + carMaintainBean.name, carMaintainBean.icon_byte);
                 float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
                 a.setTextSize(text_size);
@@ -374,10 +384,11 @@ public class CarSelectActivity extends AppCompatActivity {
     private void setCarDialog(final String car_name){
         final EditText inputServer = new EditText(CarSelectActivity.this);
         AlertDialog.Builder builder = new AlertDialog.Builder(CarSelectActivity.this);
-        List carlist = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-        if(null != carlist){
-            for(int i = 0; i < carlist.size(); i++){
-                CarMaintainBean carMaintainBean = (CarMaintainBean)carlist.get(i);
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if(null != carList){
+            for(int i = 0; i < carList.size(); i++){
+                CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(i);
                 if(car_name.equals(carMaintainBean.name)){
                     Bitmap bitmap = BitmapFactory.decodeByteArray(carMaintainBean.icon_byte, 0, carMaintainBean.icon_byte.length);
                     builder.setIcon(new BitmapDrawable(bitmap));
@@ -398,7 +409,8 @@ public class CarSelectActivity extends AppCompatActivity {
                 //do something...
                 Log.d("TEST_DEBUG", "输入车牌号为：" + mMeetName);
                 if(mMeetName.length() > 0){
-                    List recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+                    if(null != recordList) recordList.clear();
+                    recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
                     if (null != recordList) {
                         for(int i = 0; i < recordList.size(); i++){
                             MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean) recordList.get(i);
@@ -424,8 +436,9 @@ public class CarSelectActivity extends AppCompatActivity {
     }
 
     private void createCarFirstRecord(String car_name, String license_plate){
-        List carlist = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
-        if (null != carlist) {
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+        if (null != carList) {
             MyCarMaintainRecordBean myCarMaintainRecordBean = new MyCarMaintainRecordBean();
             myCarMaintainRecordBean.name = car_name;
             myCarMaintainRecordBean.license_plate = license_plate;
@@ -435,14 +448,24 @@ public class CarSelectActivity extends AppCompatActivity {
             TextView textView = findViewById(R.id.car_select_text);
             textView.setText("设置车型成功："+car_name+"\n车牌号："+license_plate);
             textView.setTextColor(Color.rgb(0, 0, 255));
-            Log.d("TEST_DEBUG", "\\\\\\\\"+carlist.size());
-            for(int i=0; i < carlist.size(); i++){
-                CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean) carlist.get(i);
+            Log.d("TEST_DEBUG", "\\\\\\\\"+carList.size());
+            for(int i=0; i < carList.size(); i++){
+                CarMaintainItemBean carMaintainItemBean = (CarMaintainItemBean) carList.get(i);
                 if(carMaintainItemBean.name.equals(car_name)) {
                     myCarMaintainRecordBean.item_name = carMaintainItemBean.item_name;
                     MainActivity.myDBMaster.myCarMaintainRecordDB.insertData(myCarMaintainRecordBean);
                 }
             }
+        }
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        if(level == TRIM_MEMORY_UI_HIDDEN){
+            if(null != carList) carList.clear();
+            if(null != itemList) itemList.clear();
+            if(null != recordList) recordList.clear();
         }
     }
 }

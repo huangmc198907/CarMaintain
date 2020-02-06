@@ -30,16 +30,20 @@ public class LastSetActivity extends AppCompatActivity {
     // fruitList用于存储数据
     private List<Fruit> fruitList=new ArrayList<>();
     private FruitAdapter adapter;
+    private List carList;
+    private List itemList;
+    private List recordList;
 
     private String buildRecordString(String car_name, String license_plate){
         return "汽车型号："+car_name+"  设置车牌号："+license_plate;
     }
 
     private boolean isMileageError(String car_name, String mileage, String license_plate){
-        List maintainList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
-        if(null != maintainList){
-            for(int i=0; i < maintainList.size(); i++){
-                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)maintainList.get(i);
+        if(null != recordList) recordList.clear();
+        recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != recordList){
+            for(int i=0; i < recordList.size(); i++){
+                MyCarMaintainRecordBean myCarMaintainRecordBean = (MyCarMaintainRecordBean)recordList.get(i);
                 if(car_name.equals(myCarMaintainRecordBean.name) &&
                         license_plate.equals(myCarMaintainRecordBean.license_plate) &&
                         mileage.equals(""+myCarMaintainRecordBean.item_mileage)){
@@ -84,7 +88,8 @@ public class LastSetActivity extends AppCompatActivity {
         float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
         textView.setTextSize(text_size);
 
-        List recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != recordList) recordList.clear();
+        recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
         if (null != recordList && recordList.size() > 0) {
             textView.setText("已设置车辆信息");
         }
@@ -111,7 +116,8 @@ public class LastSetActivity extends AppCompatActivity {
                 String mileageString = mileageView.getText().toString();
                 String timeString = timeView.getText().toString();
                 if(!mileageString.equals("") && !timeString.equals("")) {
-                    List recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+                    if(null != recordList) recordList.clear();
+                    recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
                     String car_name = "";
                     String license_plate = "";
                     if (null != recordList) {
@@ -125,7 +131,8 @@ public class LastSetActivity extends AppCompatActivity {
                         }
                     }
                     if(true == isMileageError(car_name, mileageString, license_plate)) {
-                        List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+                        if(null != carList) carList.clear();
+                        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
                         if(null != carList){
                             for(int i = 0; i < carList.size(); i++) {
                                 CarMaintainBean carMaintainBean = (CarMaintainBean)carList.get(i);
@@ -153,8 +160,10 @@ public class LastSetActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(LastSetActivity.this);
         builder.setTitle("选择保养项目");
 
-        List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
-        List itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if(null != itemList) itemList.clear();
+        itemList = MainActivity.myDBMaster.carMaintainItemDB.queryDataList();
         if(null == carList || null == itemList){
             return;
         }
@@ -256,8 +265,10 @@ public class LastSetActivity extends AppCompatActivity {
 
     // 初始化数据
     private void initFruits(){
-        List recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
-        List carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
+        if(null != recordList) recordList.clear();
+        recordList = MainActivity.myDBMaster.myCarMaintainRecordDB.queryDataList();
+        if(null != carList) carList.clear();
+        carList = MainActivity.myDBMaster.carMaintainDB.queryDataList();
         List <String> recordString = new ArrayList<>();
         if (null != recordList && null != carList) {
             for(int i=0; i < recordList.size(); i++){
@@ -286,6 +297,16 @@ public class LastSetActivity extends AppCompatActivity {
                     fruitList.add(a);
                 }
             }
+        }
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        if(level == TRIM_MEMORY_UI_HIDDEN){
+            if(null != carList) carList.clear();
+            if(null != itemList) itemList.clear();
+            if(null != recordList) recordList.clear();
         }
     }
 }

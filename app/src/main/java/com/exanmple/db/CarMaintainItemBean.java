@@ -11,6 +11,8 @@ public class CarMaintainItemBean {
     public int item_mileage_cycle;
     /** 保养项目更换或维修周期时间间隔int */
     public int item_time_cycle;
+    /** 图标图片 */
+    public byte[] icon_byte;
 
     /**
      * 转化成字符串
@@ -22,7 +24,8 @@ public class CarMaintainItemBean {
         builder.append("汽车名称：").append(name).append("--");
         builder.append("保养项目名称：").append(item_name).append("--");
         builder.append("公里数周期：").append(item_mileage_cycle).append("--");
-        builder.append("时间周期：").append(item_time_cycle).append("]");
+        builder.append("时间周期：").append(item_time_cycle).append("--");
+        builder.append("图标：").append(icon_byte).append("]");
         return builder.toString();
     }
 }

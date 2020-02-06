@@ -1,9 +1,12 @@
 package com.exanmple.myview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.exanmple.carmaintain.R;
@@ -12,7 +15,9 @@ import java.util.List;
 
 public class ExpandListViewAdapter extends BaseExpandableListAdapter {
     private List<String> groupList;//外层的数据源
+    private List<byte[]> groupIconList;
     private List<List<String>> childList;//里层的数据源
+    private List<List<byte[]>> childIconList;
     private Context context;
     private float groupTextSize = 20;
     private float childTextSize = 20;
@@ -23,6 +28,13 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         this.context = context;
         this.groupList = groupList;
         this.childList = childList;
+    }
+    public ExpandListViewAdapter(Context context, List<String> groupList,List<List<String>> childList, List<byte[]> groupIconList, List<List<byte[]>> childIconList ){
+        this.context = context;
+        this.groupList = groupList;
+        this.childList = childList;
+        this.groupIconList = groupIconList;
+        this.childIconList = childIconList;
     }
 
     @Override
@@ -99,6 +111,15 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
             number.setTextSize(groupTextSize * 2 / 3);
             addText.setTextSize(groupTextSize * 2 / 3);
         }
+        if(null != groupIconList && groupIconList.size() > groupPosition) {
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.group_image);
+            byte[] b = groupIconList.get(groupPosition);
+            if(null != b && b.length > 0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+
         return convertView;
     }
 
@@ -114,6 +135,15 @@ public class ExpandListViewAdapter extends BaseExpandableListAdapter {
         if(childTextSize > 0) {
             textView.setTextSize(childTextSize);
             modelView.setTextSize(childTextSize * 2 / 3);
+        }
+        if(null != childIconList && childIconList.size() > groupPosition &&
+                childIconList.get(groupPosition).size() > childPosition) {
+            ImageView imageView = (ImageView) view.findViewById(R.id.child_img);
+            byte[] b = childIconList.get(groupPosition).get(childPosition);
+            if(null != b && b.length > 0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+                imageView.setImageBitmap(bitmap);
+            }
         }
         return view;
     }
