@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -81,12 +82,17 @@ public class CarSelectActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CarSelectActivity.this);
                 builder.setTitle("添加新车型");// 设置标题
                 convertViewDialog = View.inflate(getApplicationContext(), R.layout.add_dialog, null);
-                builder.setView(convertViewDialog);
 
-                final EditText car_name = (EditText) convertViewDialog.findViewById(R.id.dialog_add_name);
-                final EditText car_mileage = (EditText) convertViewDialog.findViewById(R.id.dialog_add_mileage);
-                final EditText car_time = (EditText) convertViewDialog.findViewById(R.id.dialog_add_time);
+                EditText car_name = (EditText) convertViewDialog.findViewById(R.id.dialog_add_name);
+                car_name.setHintTextColor(Color.rgb(200,200,200));
+                EditText car_mileage = (EditText) convertViewDialog.findViewById(R.id.dialog_add_mileage);
+                car_mileage.setHintTextColor(Color.rgb(200,200,200));
+                EditText car_time = (EditText) convertViewDialog.findViewById(R.id.dialog_add_time);
+                car_time.setHintTextColor(Color.rgb(200,200,200));
                 Button button = (Button) convertViewDialog.findViewById(R.id.dialog_add_icon_button);
+                final EditText carNameView = car_name;
+                final EditText mileageView = car_mileage;
+                final EditText timeView = car_time;
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -112,9 +118,9 @@ public class CarSelectActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         // TODO Auto-generated method stub
-                        String carNameString = car_name.getText().toString();
-                        String carMileageString = car_mileage.getText().toString();
-                        String carTimeString = car_time.getText().toString();
+                        String carNameString = carNameView.getText().toString();
+                        String carMileageString = mileageView.getText().toString();
+                        String carTimeString = timeView.getText().toString();
                         if(!carNameString.equals("") && !carMileageString.equals("") && !carTimeString.equals("")) {
                             addNewCar(carNameString, carMileageString, carTimeString);
                         }else{
@@ -124,6 +130,7 @@ public class CarSelectActivity extends AppCompatActivity {
                         }
                     }
                 });
+                builder.setView(convertViewDialog);
                 builder.create().show();// 使用show()方法显示对话框
             }
         });
@@ -239,6 +246,7 @@ public class CarSelectActivity extends AppCompatActivity {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 BaoJun560.compressBitmap(iconBitmap).compress(Bitmap.CompressFormat.PNG, 100, os);
                 carMaintainBean.icon_byte = os.toByteArray();
+                iconBitmap = null;
             }else{
                 carMaintainBean.icon_byte = new byte[0];
             }
@@ -372,7 +380,7 @@ public class CarSelectActivity extends AppCompatActivity {
         if (null != carList) {
             for(int i=0; i < carList.size(); i++){
                 CarMaintainBean carMaintainBean = (CarMaintainBean) carList.get(i);
-                Fruit a = new Fruit("" + carMaintainBean.name, carMaintainBean.icon_byte);
+                Fruit a = new Fruit("" + carMaintainBean.name, carMaintainBean.icon_byte, "点击设置\n长按删除");
                 float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
                 a.setTextSize(text_size);
                 car_name = carMaintainBean.name;

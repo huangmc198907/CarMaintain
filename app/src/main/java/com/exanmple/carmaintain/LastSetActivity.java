@@ -290,7 +290,7 @@ public class LastSetActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    Fruit a = new Fruit(recordStrings,b);
+                    Fruit a = new Fruit(recordStrings,b, "点击设置");
                     float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
                     a.setTextSize(text_size);
                     recordString.add(recordStrings);

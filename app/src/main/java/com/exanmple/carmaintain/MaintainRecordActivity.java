@@ -727,6 +727,10 @@ public class MaintainRecordActivity extends AppCompatActivity {
                     }else if(groupPosition >= 0 && outAdapterItemLongClickFlag[0] == true) {
                         outAdapterItemLongClickFlag[0] = false;
                         ExpandableListView listView = adapter.getIneerExpandListView(groupPosition);
+                        if(null == listView){
+                            Log.d("TEST DEBUG", "get list view failed :groupPosition="+groupPosition);
+                            return false;
+                        }
                         final long secondPackedPosition = listView.getExpandableListPosition(outAdapterPosition[0]);
                         int secondGroupPosition = listView.getPackedPositionGroup(secondPackedPosition);
                         int secondChildPosition = listView.getPackedPositionChild(secondPackedPosition);

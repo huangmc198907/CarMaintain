@@ -51,6 +51,8 @@ public class FruitAdapter extends ArrayAdapter<Fruit> {
             viewHolder=new ViewHolder();
             viewHolder.fruitImage=view.findViewById(R.id.fruit_image);
             viewHolder.fruitName=view.findViewById(R.id.fruit_name);
+            TextView textView = (TextView) view.findViewById(R.id.fruit_text);
+            textView.setText(fruit.getAdditionalText());
 
             // 将ViewHolder存储在View中（即将控件的实例存储在其中）
             view.setTag(viewHolder);

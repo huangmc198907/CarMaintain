@@ -3,31 +3,34 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/add_car_dialog">
+
     <EditText
         android:id="@+id/dialog_add_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="车辆名称和型号"
-        android:textSize="20dp"
-        />
+        android:textColor="#000000"
+        android:textSize="20dp" />
+
     <EditText
         android:id="@+id/dialog_add_mileage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dialog_add_name"
-        android:hint="车辆保养公里数周期"
-        android:textSize="20dp"
+        android:hint="车辆保养公里数周期\n(如：5000 表示5000公里)"
         android:inputType="number"
-        />
+        android:textColor="#000000"
+        android:textSize="20dp" />
+
     <EditText
         android:id="@+id/dialog_add_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="车辆保养时间周期"
         android:layout_below="@+id/dialog_add_mileage"
-        android:textSize="20dp"
+        android:hint="车辆保养时间周期\n(如：3 表示3个月)"
         android:inputType="number"
-        />
+        android:textColor="#000000"
+        android:textSize="20dp" />
     <Button
         android:id="@+id/dialog_add_icon_button"
         android:layout_width="match_parent"

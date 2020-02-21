@@ -40,10 +40,16 @@ public class OuterAdaper extends BaseExpandableListAdapter {
             this.firstList = new ArrayList<>();
         }
         this.activity = activity;
+        for(int i=0; i < firstList.size(); i++){
+            innerExpandableListViews.add(new InnerExpandableListView(activity));
+        }
     }
 
     public ExpandableListView getIneerExpandListView(int id) {
-        return innerExpandableListViews.get(id);
+        if(innerExpandableListViews.size() > id)
+            return innerExpandableListViews.get(id);
+        else
+            return null;
     }
 
     // 组数量
@@ -143,7 +149,7 @@ public class OuterAdaper extends BaseExpandableListAdapter {
 
             }
         });
-        innerExpandableListViews.add(expandableListView);
+        innerExpandableListViews.add(i, expandableListView);
         return expandableListView;
     }
     @Override

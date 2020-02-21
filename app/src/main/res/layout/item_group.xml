@@ -44,5 +44,6 @@
         android:gravity="center"
         android:textSize="15sp"
         android:layout_alignParentRight="true"
-        android:text="长按\n添加"/>
+        android:text="长按\n添加"
+        android:paddingRight="5dp"/>
 </RelativeLayout>

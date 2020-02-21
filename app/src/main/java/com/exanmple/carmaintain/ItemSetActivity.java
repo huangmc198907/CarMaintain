@@ -208,6 +208,7 @@ public class ItemSetActivity extends AppCompatActivity {
                 String itemTimeString = item_time.getText().toString();
                 if(!itemNameString.equals("") && !itemMileageString.equals("") && !itemTimeString.equals("")) {
                     MainActivity.myDBMaster.carMaintainItemDB.deleteData(carMaintainItemBean.id);
+                    iconBitmap = BitmapFactory.decodeByteArray(carMaintainItemBean.icon_byte, 0, carMaintainItemBean.icon_byte.length);
                     addNewItem(carMaintainItemBean.name, itemNameString, itemMileageString, itemTimeString);
                 }else{
                     TextView textView = findViewById(R.id.item_set_text);
@@ -228,14 +229,18 @@ public class ItemSetActivity extends AppCompatActivity {
 
         final EditText item_name = (EditText) convertViewDialog.findViewById(R.id.dialog_add_name);
         item_name.setHint("项目名称");
+        item_name.setHintTextColor(Color.rgb(200,200,200));
 
         final EditText item_mileage = (EditText) convertViewDialog.findViewById(R.id.dialog_add_mileage);
-        item_mileage.setHint("更换或维修公里数周期");
+        item_mileage.setHint("更换或维修公里数周期\n(如：5000 表示5000公里)");
         item_mileage.setInputType(InputType.TYPE_CLASS_NUMBER);
+        item_mileage.setHintTextColor(Color.rgb(200,200,200));
+
 
         final EditText item_time = (EditText) convertViewDialog.findViewById(R.id.dialog_add_time);
-        item_time.setHint("更换或维修时间周期");
+        item_time.setHint("更换或维修时间周期\n(如：3 表示3个月)");
         item_time.setInputType(InputType.TYPE_CLASS_NUMBER);
+        item_time.setHintTextColor(Color.rgb(200,200,200));
 
         Button button = (Button) convertViewDialog.findViewById(R.id.dialog_add_icon_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -344,6 +349,7 @@ public class ItemSetActivity extends AppCompatActivity {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 BaoJun560.compressBitmap(iconBitmap).compress(Bitmap.CompressFormat.PNG, 100, os);
                 carMaintainItemBean.icon_byte = os.toByteArray();
+                iconBitmap = null;
             }else{
                 carMaintainItemBean.icon_byte = new byte[0];
             }

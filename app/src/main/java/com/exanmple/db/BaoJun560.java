@@ -21,24 +21,18 @@ import java.util.List;
 
 public class BaoJun560 {
     final static public Bitmap compressBitmap(Bitmap bitmap){
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 1;
-        options.inJustDecodeBounds = false;
-        int length = os.toByteArray().length;
-        while(length > (5 * 1024)) {
-            bitmap = BitmapFactory.decodeStream(new ByteArrayInputStream(os.toByteArray()), null, options);
-            ByteArrayOutputStream osTmp = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, osTmp);
-            length = osTmp.toByteArray().length;
-            if(length > 10 * 1024){
-                options.inSampleSize = options.inSampleSize * 2;
-            }else {
-                options.inSampleSize++;
-            }
+        int h = bitmap.getHeight();
+        int w = bitmap.getWidth();
+        int fix = 60;
+        if(h > w){
+            w = fix*w/h;
+            h = fix;
+        }else{
+            h = fix*h/w;
+            w = fix;
         }
-        return bitmap;
+        Log.d("TEST DEBUG", "compressBitmap: w="+w+" h="+h);
+        return Bitmap.createScaledBitmap(bitmap, w, h, true);
     }
 
     public BaoJun560(Context context, MyDBMaster myDBMaster) {
