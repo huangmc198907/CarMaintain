@@ -380,7 +380,7 @@ public class CarSelectActivity extends AppCompatActivity {
         if (null != carList) {
             for(int i=0; i < carList.size(); i++){
                 CarMaintainBean carMaintainBean = (CarMaintainBean) carList.get(i);
-                Fruit a = new Fruit("" + carMaintainBean.name, carMaintainBean.icon_byte, "点击设置\n长按删除");
+                Fruit a = new Fruit("" + carMaintainBean.name + "\n("+carMaintainBean.maintain_mileage_cycle + "公里," + carMaintainBean.maintain_time_cycle+"个月）", carMaintainBean.icon_byte, "点击设置\n长按删除");
                 float text_size = MainActivity.getTextSize(this, this.getWindowManager().getDefaultDisplay().getWidth());
                 a.setTextSize(text_size);
                 car_name = carMaintainBean.name;
